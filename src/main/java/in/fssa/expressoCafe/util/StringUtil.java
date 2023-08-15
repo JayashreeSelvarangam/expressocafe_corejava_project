@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import in.fssa.expressoCafe.exception.ValidationException;
+import in.fssa.expressoCafe.model.Product;
 
 public class StringUtil {
 
@@ -70,5 +71,7 @@ public class StringUtil {
 		return false;
 
 	}
+
+	
 
 }

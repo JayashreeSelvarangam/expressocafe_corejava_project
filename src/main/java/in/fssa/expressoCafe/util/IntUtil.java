@@ -1,6 +1,9 @@
 package in.fssa.expressoCafe.util;
 
+import java.util.List;
 import java.util.Map;
+
+import com.google.protobuf.Internal.ListAdapter;
 
 import in.fssa.expressoCafe.exception.ValidationException;
 import in.fssa.expressoCafe.model.Price;
@@ -15,45 +18,87 @@ public class IntUtil {
 		}
 
 	}
-	
-	public static void rejectIfInvalidInt(int input, String inputName) throws ValidationException {
-		if(input <=0 ) {
+
+	public static void rejectIfInvalidInt(double input, String inputName) throws ValidationException {
+		System.out.print(false);
+		if (input <= 0) {
+			throw new ValidationException("Invalid ".concat(inputName));
+		}
+		System.out.print(false);
+	}
+
+	public static void priceCheck(int input, String inputName) throws ValidationException {
+		if(input < 0 || input > 1000) {
 			throw new ValidationException("Invalid ".concat(inputName));
 		}
 	}
 
-//	public static void priceCheck(int input, String inputName) throws ValidationException {
-//		if(input < 0 || input > 1000) {
-//			throw new ValidationException("Invalid ".concat(inputName));
-//		}
-//	}
+	public static void validatePriceListRelationships(List<Price> priceList) throws ValidationException {
+		double smallPrice = 0;
+		double mediumPrice = 0;
+		double largePrice = 0;
+
+		if (priceList == null) {
+			throw new ValidationException("Prices for all sizes (small, medium, large) are required.");
+		}
+
+		for (Price price : priceList) {
+
+			if (price.getPrice() <= 0) {
+				throw new ValidationException("Invalid price: " + price.getPrice());
+			}
+
+			if (price.getSize() == null) {
+				throw new ValidationException("SizeEnum cannot be null");
+			}
+
+			if (price.getSize() == SizeEnum.SMALL) {
+				smallPrice = price.getPrice();
+			} else if (price.getSize() == SizeEnum.MEDIUM) {
+				mediumPrice = price.getPrice();
+			} else if (price.getSize() == SizeEnum.LARGE) {
+				largePrice = price.getPrice();
+			}
+		}
+
+		if (smallPrice == 0 || mediumPrice == 0 || largePrice == 0) {
+			throw new ValidationException("Prices for all sizes (small, medium, large) are required.");
+		}
+
+		if (smallPrice > 1000) {
+			throw new ValidationException("Small price should not be greater than 1000");
+		}
+		if (mediumPrice > 1000) {
+			throw new ValidationException("Medium price should not be greater than 1000");
+		}
+		if (largePrice > 1000) {
+			throw new ValidationException("Large price should not be greater than 1000");
+		}
+
+		if (smallPrice <= 0) {
+			throw new ValidationException("Small Price should be less than zero");
+		}
+
+		if (mediumPrice <= 0) {
+			throw new ValidationException("Medium Price should be less than zero");
+		}
+
+		if (largePrice <= 0) {
+			throw new ValidationException("Small Price should be less than zero");
+		}
+	}
+
+	public static void rejectIfInvalidInt(double price) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public static void priceCheck(double price,String inputNmae) throws ValidationException {
+		// TODO Auto-generated method stub
+		if(price < 0 || price > 1000) {
+			throw new ValidationException("Invalid ".concat(inputNmae));
+		}
+	}
+
 	
-	 public static void validatePriceRelationships(Map<SizeEnum, Double> priceMap) throws ValidationException {
-	        Double smallPrice = priceMap.get(SizeEnum.SMALL);
-	        Double mediumPrice = priceMap.get(SizeEnum.MEDIUM);
-	        Double largePrice = priceMap.get(SizeEnum.LARGE);
-
-	        if(smallPrice>1000) {
-	        	throw new ValidationException("Small price should not be greater that 1000");
-	        }
-	        if(mediumPrice>1000) {
-	        	throw new ValidationException("mediumPrice should not be greater that 1000");
-	        }
-	        if(largePrice>1000) {
-	        	throw new ValidationException("largePrice should not be greater that 1000");
-	        }
-	        
-	        
-	        if (smallPrice <= 0 || mediumPrice < 0 || smallPrice > mediumPrice) {
-	            throw new ValidationException("Small Price should be less than  Medium Price");
-	        }
-
-	        if (mediumPrice <= 0 || largePrice <= 0  || mediumPrice > largePrice) {
-	            throw new ValidationException("Medium Price should be less than  Large Price");
-	        }
-
-	        if (smallPrice <= 0 || largePrice <= 0 || smallPrice > largePrice) {
-	            throw new ValidationException("Small Price should be less than  Large Price");
-	        }
-	    }
 }

@@ -4,24 +4,21 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Price {
-	private int priceId ;
-	private int productId;
-	private int price;
-	private int sizeId;
+
 	private Timestamp startDate;
 	private Timestamp endDate;
+	private int priceId;
+   
+	private double price;
+    private SizeEnum size;
+    private Product product;
 	
-	public int getSizeId() {
-		return sizeId;
-	}
-	public void setSizeId(int sizeId) {
-		this.sizeId = sizeId;
-	}
+	
 	public Timestamp getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(Timestamp timestamp) {
-		this.startDate = timestamp;
+	public void setStartDate(Timestamp startDate) {
+		this.startDate = startDate;
 	}
 	public Timestamp getEndDate() {
 		return endDate;
@@ -29,29 +26,28 @@ public class Price {
 	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
-	
 	public int getPriceId() {
 		return priceId;
 	}
 	public void setPriceId(int priceId) {
 		this.priceId = priceId;
 	}
-	public int getPrice() {
+	public double getPrice() {
 		return price;
 	}
-	public void setPrice(int price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
-	@Override
-	public String toString() {
-		return "Price [priceId=" + priceId + ", price=" + price + "]";
+	public SizeEnum getSize() {
+		return size;
 	}
-	public void setProductId(int productId) {
-		// TODO Auto-generated method stub
-		this.productId = productId;
+	public void setSize(SizeEnum size) {
+		this.size = size;
 	}
-	public int getProductId() {
-		// TODO Auto-generated method stub
-		return productId;
+	public Product getProduct() {
+		return product;
+	}
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 }

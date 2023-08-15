@@ -1,5 +1,8 @@
 package in.fssa.expressoCafe.validator;
 
+import in.fssa.expressoCafe.dao.ProductDAO;
+import in.fssa.expressoCafe.dao.SizeDAO;
+import in.fssa.expressoCafe.exception.PersistanceException;
 import in.fssa.expressoCafe.exception.ValidationException;
 import in.fssa.expressoCafe.model.Size;
 
@@ -13,7 +16,7 @@ public class SizeValidator {
     }
 
     public static void validateSizeId(int sizeId) throws ValidationException {
-        if (sizeId < 0) {
+        if (sizeId <= 0) {
             throw new ValidationException("Size ID must be non-negative");
         }
     }
@@ -23,5 +26,21 @@ public class SizeValidator {
             throw new ValidationException("Size name cannot be null or empty");
         }
     }
+    
 
+	public static void isSizeIdValid(int sizeId) throws ValidationException {
+
+		try {
+			SizeDAO sizeDAO = new SizeDAO();
+			// do it later
+			// IntUtil.rejectIfInvalidInt(Productid, "ProductId");
+			sizeDAO.doesSizeIdExists(sizeId);
+			
+		} catch (PersistanceException e) {
+			throw new ValidationException("Invalid SizeId");
+		}
+	
+	}
 }
+
+

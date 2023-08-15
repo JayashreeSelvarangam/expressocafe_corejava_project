@@ -17,17 +17,38 @@ import in.fssa.expressoCafe.exception.ValidationException;
 import in.fssa.expressoCafe.model.Price;
 import in.fssa.expressoCafe.util.ConnectionUtil;
 import in.fssa.expressoCafe.util.IntUtil;
+import in.fssa.expressoCafe.validator.ProductValidator;
+import in.fssa.expressoCafe.validator.SizeValidator;
 
 public class PriceService {
+
+	public void createPrice(Price price) throws ServiceException, ValidationException {
+		try {
+			
+			IntUtil.priceCheck(price.getPrice(), "Price"); // Validate the price before creating
+
+			PriceDAO priceDao = new PriceDAO();
+			priceDao.createProductPrices(price);
+
+			System.out.println("Price created successfully");
+		} 
+		catch (PersistanceException e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
+		}
+	}
 
 	public List<Price> getHistoryOfProuct(int productId) throws ServiceException {
 		List<Price> priceList = null;
 		try {
 			ProductDAO prod = new ProductDAO();
-			prod.doesProductExist(productId);
+			IntUtil.rejectIfInvalidInt(productId);
+			ProductValidator.isProductIdValid(productId);
 			PriceDAO price = new PriceDAO();
 			priceList = price.getAllPriceHistory(productId);
-		} catch (PersistanceException e) {
+		}catch (ValidationException e) {
+			throw new ServiceException(e.getMessage());
+		}  catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
 		return priceList;
@@ -37,59 +58,64 @@ public class PriceService {
 		List<Price> priceList = null;
 		try {
 			ProductDAO prod = new ProductDAO();
-			prod.doesProductExist(productId);
+			SizeDAO sizeDAO = new SizeDAO();
+			IntUtil.rejectIfInvalidInt(productId);
+			IntUtil.rejectIfInvalidInt(sizeId);
+			// check product id already exists
+			ProductValidator.isProductIdValid(productId);
+
+			// check size_id already exists
+			SizeValidator.isSizeIdValid(sizeId);			
 			PriceDAO price = new PriceDAO();
+			
 			priceList = price.getAllPriceHistoryWithSizeID(productId, sizeId);
-		} catch (PersistanceException e) {
+		}catch (ValidationException e) {
+			throw new ServiceException(e.getMessage());
+		} 
+		catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
 		return priceList;
 	}
 
-	
-	
-	 
 
-	// DOUBT
-	public void updatePrice(int productId, int size_id, int price) throws ValidationException, ServiceException {
+	
+	public void updatePrice(int productId, int size_id, double price) throws ValidationException, ServiceException {
+		try{
 		
-		// product exists?
-		// size exists?
-		// current price exists?
-		// current price DAO? => price_id
-		// update product price => (price_id, newPrice)
-		// validator -> current product price id
-		
-		try {
 			PriceDAO price1 = new PriceDAO();
 			// form validation for product id and category id
-			IntUtil.rejectIfInvalidInt(size_id,"CategoryId");
-			IntUtil.rejectIfInvalidInt(productId,"productId");
-			
-			// check product id  already exists
-			ProductDAO productDAO = new ProductDAO();
-			productDAO.doesProductExist(productId);
-			
-			// check size_id already exists
-			SizeDAO size = new SizeDAO();
-			size.doesSizeIdExists(size_id);
-			
-			//check whether the price needed to be updated is same as its previous price 
-			int Storedprice = price1.findPriceByProductIdAndSizeId(productId, size_id);
-			
-			// check
-			// validate whether the price is appropriate 
-			// I will do it later
-			
-			if(Storedprice == price) {
-			int priceId = price1.checkIfPriceExistForProductWithUniqueSize(productId, size_id);
-			LocalDateTime date = LocalDateTime.now();
-			java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
+			IntUtil.rejectIfInvalidInt(size_id, "SizeId");
+			IntUtil.rejectIfInvalidInt(productId, "ProductId");
+			IntUtil.priceCheck(price, "Price");
+			// check product id already exists
+			ProductValidator.isProductIdValid(productId);
 
-			price1.UpdatePrice(priceId, dateTime);
-			price1.SetNewPrice(productId, size_id, price, dateTime);
+			// check size_id already exists
+			SizeValidator.isSizeIdValid(size_id);
+
+			// check whether the price needed to be updated is same as its previous price
+	
+			int Storedprice = price1.findPriceByProductIdAndSizeId(productId, size_id);
+
+			// check
+			// validate whether the price is appropriate
+			// I will do it later
+
+			if (Storedprice == price) {
+				int priceId = price1.checkIfPriceExistForProductWithUniqueSize(productId, size_id);
+				LocalDateTime date = LocalDateTime.now();
+				java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
+
+				price1.UpdatePrice(priceId, dateTime);
+				price1.SetNewPrice(productId, size_id, price, dateTime);
+			}else {
+				throw new ServiceException("Product price is same");
 			}
-		} catch (PersistanceException e) {
+		} catch (ValidationException e) {
+			throw new ServiceException(e.getMessage());
+		} 
+		catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
 	}
