@@ -58,7 +58,7 @@ public class PriceDAO {
 	        List<Price> prices = new ArrayList<>();
 
 	        try {
-	            String query =  "SELECT price_id,size_id, price FROM price WHERE product_id = ?";
+	            String query =  "SELECT price_id,size_id, price FROM price WHERE product_id = ? AND end_date IS NULL";
 
 	            con = ConnectionUtil.getConnnetion();
 	            ps = con.prepareStatement(query);
@@ -74,8 +74,8 @@ public class PriceDAO {
 	                prices.add(price);
 	            }
 
-	            return prices;
-	        } catch (SQLException e) {
+	      } 
+	        catch (SQLException e) {
 	            e.printStackTrace();
 	            throw new PersistanceException(e.getMessage());
 	        }
@@ -85,6 +85,7 @@ public class PriceDAO {
 	        finally {
 	            ConnectionUtil.close(con, ps, rs);
 	        }
+	        return prices;
 	    }
 
 
@@ -218,7 +219,7 @@ public class PriceDAO {
 		return priceId;
 	}
 
-	public void SetNewPrice(int product_id, int size_id, double price, Timestamp dateTime) {
+	public void SetNewPrice(int product_id, int size_id, double price, Timestamp dateTime) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
@@ -234,7 +235,7 @@ public class PriceDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException("Price updation is unsuccessfull");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());

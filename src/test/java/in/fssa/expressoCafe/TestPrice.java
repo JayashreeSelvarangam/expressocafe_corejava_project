@@ -14,11 +14,11 @@ public class TestPrice {
 
     @Test
     void testUpdatePriceValidData1() {
-        // Arrange
+       
     	PriceService priceService = new PriceService();
 
         // Act and Assert
-        assertDoesNotThrow(() -> priceService.updatePrice(30, 1, 9.99));
+        assertDoesNotThrow(() -> priceService.updatePrice(10, 3, 90));
     }
 
     @Test
@@ -35,7 +35,7 @@ public class TestPrice {
     	PriceService priceService = new PriceService();
     	
         
-    	ServiceException exception =  assertThrows(ServiceException.class, () -> priceService.updatePrice(30, 999, 9.99));
+    	ServiceException exception =  assertThrows(ServiceException.class, () -> priceService.updatePrice(11, 999, 9.99));
     	assertEquals("Invalid SizeId", exception.getMessage());
     }
 
@@ -90,7 +90,7 @@ public class TestPrice {
     	PriceService priceService = new PriceService();
 
         // Act and Assert
-        assertDoesNotThrow(() -> priceService.getHistoryOfProuctWithUniqueSize(30, 1));
+        assertDoesNotThrow(() -> priceService.getHistoryOfProuctWithUniqueSize(11, 1));
     }
     
     @Test
@@ -107,7 +107,7 @@ public class TestPrice {
     	PriceService priceService = new PriceService();
     	
         
-    	ServiceException exception =  assertThrows(ServiceException.class, () -> priceService.getHistoryOfProuctWithUniqueSize(30, -1));
+    	ServiceException exception =  assertThrows(ServiceException.class, () -> priceService.getHistoryOfProuctWithUniqueSize(11, -1));
     	assertEquals("Invalid SizeId", exception.getMessage());
     }
 
@@ -127,7 +127,7 @@ public class TestPrice {
     	PriceService priceService = new PriceService();
 
         
-    	ServiceException exception = assertThrows(ServiceException.class, () -> priceService.getHistoryOfProuctWithUniqueSize(30, 999));
+    	ServiceException exception = assertThrows(ServiceException.class, () -> priceService.getHistoryOfProuctWithUniqueSize(11, 999));
     	assertEquals("Invalid SizeId", exception.getMessage());
     }
    
@@ -140,8 +140,7 @@ public class TestPrice {
     void testGetAllPriceValidData() {
     	PriceService priceService = new PriceService();
 
-        // Act and Assert
-        assertDoesNotThrow(() -> priceService.getHistoryOfProuct(30));
+        assertDoesNotThrow(() -> priceService.getHistoryOfProuct(11));
     
     }
     @Test

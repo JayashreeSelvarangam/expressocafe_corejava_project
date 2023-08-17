@@ -139,7 +139,7 @@ public class ProductDAO {
 
 		try {
 			connection = ConnectionUtil.getConnnetion();
-			String query = "SELECT * FROM product WHERE product_id = ?";
+			String query = "SELECT * FROM product WHERE product_id = ? AND status = 1";
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, product_id);
 			rs = ps.executeQuery();
@@ -206,7 +206,7 @@ public class ProductDAO {
 			if (rs.next()) {
 				int status = rs.getInt("status");
 				if (status == 1) {
-					;
+					
 					System.out.print("Product is active");
 					value = true;
 				} else {

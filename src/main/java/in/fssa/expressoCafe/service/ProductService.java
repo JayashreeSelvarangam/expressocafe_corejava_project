@@ -22,7 +22,7 @@ public class ProductService {
 		try {
 			ProductDAO productDAO = new ProductDAO();
 			PriceService priceService = new PriceService();
-
+			
 			// product Validation
 			ProductValidator.Validate(product);
 
@@ -93,9 +93,10 @@ public class ProductService {
 			if (productDAO.isActive(product_id)) {
 				productDAO.deleteProduct(product_id);
 			}
-		} catch (ValidationException e) {
+		}catch (ValidationException e) {
 			throw new ServiceException(e.getMessage());
-		} catch (PersistanceException e) {
+		}
+			  catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
 	}
@@ -168,9 +169,6 @@ public class ProductService {
 		}
 		return product;
 	}
-
-	
-
 
 //	// get all product name
 

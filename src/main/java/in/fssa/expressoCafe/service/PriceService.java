@@ -15,6 +15,7 @@ import in.fssa.expressoCafe.exception.PersistanceException;
 import in.fssa.expressoCafe.exception.ServiceException;
 import in.fssa.expressoCafe.exception.ValidationException;
 import in.fssa.expressoCafe.model.Price;
+import in.fssa.expressoCafe.model.Product;
 import in.fssa.expressoCafe.util.ConnectionUtil;
 import in.fssa.expressoCafe.util.IntUtil;
 import in.fssa.expressoCafe.validator.ProductValidator;
@@ -24,15 +25,14 @@ public class PriceService {
 
 	public void createPrice(Price price) throws ServiceException, ValidationException {
 		try {
-			
+
 			IntUtil.priceCheck(price.getPrice(), "Price"); // Validate the price before creating
 
 			PriceDAO priceDao = new PriceDAO();
 			priceDao.createProductPrices(price);
 
 			System.out.println("Price created successfully");
-		} 
-		catch (PersistanceException e) {
+		} catch (PersistanceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
 		}
@@ -46,9 +46,9 @@ public class PriceService {
 			ProductValidator.isProductIdValid(productId);
 			PriceDAO price = new PriceDAO();
 			priceList = price.getAllPriceHistory(productId);
-		}catch (ValidationException e) {
+		} catch (ValidationException e) {
 			throw new ServiceException(e.getMessage());
-		}  catch (PersistanceException e) {
+		} catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
 		return priceList;
@@ -65,25 +65,24 @@ public class PriceService {
 			ProductValidator.isProductIdValid(productId);
 
 			// check size_id already exists
-			SizeValidator.isSizeIdValid(sizeId);			
+			SizeValidator.isSizeIdValid(sizeId);
 			PriceDAO price = new PriceDAO();
-			
+
 			priceList = price.getAllPriceHistoryWithSizeID(productId, sizeId);
-		}catch (ValidationException e) {
+		} catch (ValidationException e) {
 			throw new ServiceException(e.getMessage());
-		} 
-		catch (PersistanceException e) {
+		} catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
 		return priceList;
 	}
 
+	public Product updatePrice(int productId, int size_id, double price) throws ValidationException, ServiceException {
+		Product product = new Product();
+		try {
 
-	
-	public void updatePrice(int productId, int size_id, double price) throws ValidationException, ServiceException {
-		try{
-		
 			PriceDAO price1 = new PriceDAO();
+			ProductService productser = new ProductService();
 			// form validation for product id and category id
 			IntUtil.rejectIfInvalidInt(size_id, "SizeId");
 			IntUtil.rejectIfInvalidInt(productId, "ProductId");
@@ -95,28 +94,31 @@ public class PriceService {
 			SizeValidator.isSizeIdValid(size_id);
 
 			// check whether the price needed to be updated is same as its previous price
-	
 			int Storedprice = price1.findPriceByProductIdAndSizeId(productId, size_id);
 
 			// check
 			// validate whether the price is appropriate
 			// I will do it later
 
-			if (Storedprice == price) {
+			if (Storedprice != price) {
 				int priceId = price1.checkIfPriceExistForProductWithUniqueSize(productId, size_id);
 				LocalDateTime date = LocalDateTime.now();
 				java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
-
 				price1.UpdatePrice(priceId, dateTime);
 				price1.SetNewPrice(productId, size_id, price, dateTime);
-			}else {
-				throw new ServiceException("Product price is same");
+				// get all prices for the product
+			} 
+			else {
+				throw new ServiceException("Product price should not be same");
 			}
+
+			product = productser.findProductWithProductId(productId);
 		} catch (ValidationException e) {
 			throw new ServiceException(e.getMessage());
-		} 
-		catch (PersistanceException e) {
+		} catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
+
+		return product;
 	}
 }

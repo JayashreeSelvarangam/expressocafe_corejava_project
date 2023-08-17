@@ -95,9 +95,21 @@ public class App {
 //		Product product = new Product();
 //		product = productService.findProductWithProductId(11);
 //		System.out.print(product.toString());
-
+		Product product =  new Product();
 		PriceService price = new PriceService();
-		price.updatePrice(36, 1,5.99);
+		product = price.updatePrice(10, 3,231.99);
+		if(product!=null) {
+		System.out.println("Product ID: " + product.getProduct_id());
+		System.out.println("Name: " + product.getName());
+		System.out.println("Description: " + product.getDescription());
+		   List<Price> updatedPrices = product.getPriceList();
+	        for (Price price1 : updatedPrices) {
+	            System.out.println("Price ID: " + price1.getPriceId());
+	            System.out.println("Price: $" + price1.getPrice());
+	            System.out.println("Size: " + price1.getSize());
+	            System.out.println("------------------------------");
+	        }
+		}
 
 //		  	PriceService priceDAO = new PriceService();
 //	        int productId =  11; // Replace with the actual product ID
@@ -161,6 +173,7 @@ public class App {
 //        category1.setCategoryId(11);
 //
 //       
+		
 //        // Add Price instances to the Product's priceList
 //        
 //        product1.setCategory(category1);

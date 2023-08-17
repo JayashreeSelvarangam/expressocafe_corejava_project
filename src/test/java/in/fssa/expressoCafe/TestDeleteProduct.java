@@ -21,7 +21,7 @@ public class TestDeleteProduct {
 	
 	@Test
 	void testDeleteProductWithValidId() {
-		int productId = 30;
+		int productId = 35;
 		ProductService productService = new ProductService();
 		assertDoesNotThrow(() -> productService.deleteProduct(productId));
 	}

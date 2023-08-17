@@ -60,7 +60,7 @@ public class TestCreateProduct {
 
 		Product product3 = new Product();
 
-		product3.setName("Cappu8778732cv88ci7no");
+		product3.setName("Cappu87787gjhjhhjgjhg32cv88ci7no");
 		product3.setDescription("Feel refreshed");
 		product3.setPriceList(priceList);
 		product3.setCategory(category);
@@ -286,8 +286,4 @@ public class TestCreateProduct {
 	                () -> productService.createProduct(product));
 	        assertEquals("Category object cannot be null", exception.getMessage());
 	    }
-	    
-	    
-	 
-	 
 }
