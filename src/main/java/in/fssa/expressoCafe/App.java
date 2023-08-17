@@ -86,7 +86,6 @@ public class App {
 //				double price = entry.getValue();
 //				System.out.println(size + " Price: " + price);
 //			}
-//
 //			System.out.println("Category ID: " + product.getCategoryId());
 //			System.out.println("------------------------");
 //		}

@@ -8,10 +8,20 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class ConnectionUtil {
 	public static Connection getConnnetion() {
 		
-		Dotenv env = Dotenv.load();
-		String url = env.get("DATABASE_HOSTNAME");
-		String userName = env.get("DATABASE_USERNAME");
-		String password = env.get("DATABASE_PASSWORD");
+        String url;
+        String userName;
+        String password;
+
+        if (System.getenv("CI") != null) {
+            url = System.getenv("DATABASE_HOSTNAME");
+            userName = System.getenv("DATABASE_USERNAME");
+            password = System.getenv("DATABASE_PASSWORD");
+        } else {
+            Dotenv env = Dotenv.load();
+            url = env.get("DATABASE_HOSTNAME");
+            userName = env.get("DATABASE_USERNAME");
+            password = env.get("DATABASE_PASSWORD");
+        }		
 		Connection connection = null;
 		
 		try {

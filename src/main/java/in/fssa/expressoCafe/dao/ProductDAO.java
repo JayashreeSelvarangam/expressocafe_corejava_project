@@ -250,7 +250,7 @@ public class ProductDAO {
 //		        
 				products.add(product);
 
-				products.add(product);
+				
 			}
 		} catch (SQLException e) {
 			throw new PersistanceException("Cannot get all products");
@@ -319,7 +319,6 @@ public class ProductDAO {
 					product.setDescription(rs.getString("description"));
 					category.setCategoryId(rs.getInt("category_id"));
 					product.setCategory(category);
-				
 		        }
 		    } catch (SQLException e){
 		        throw new PersistanceException("Cannot get  product detail");
