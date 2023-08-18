@@ -12,6 +12,10 @@ import in.fssa.expressoCafe.model.Size;
 import in.fssa.expressoCafe.util.ConnectionUtil;
 
 public class SizeDAO {
+	/**
+	 * 
+	 * @return
+	 */
 	public List<Size> getAllSizes() {
 		String query = "SELECT * FROM sizes";
 		Connection connection = null;
@@ -39,7 +43,11 @@ public class SizeDAO {
 
 		return sizes;
 	}
-
+/**
+ * 
+ * @param sizeId
+ * @return
+ */
 	public Size getSizeById(int sizeId) {
 
 		Connection connection = null;
@@ -70,7 +78,12 @@ public class SizeDAO {
 		}
 		return size;
 	}
-
+/**
+ * 
+ * @param sizeId
+ * @return
+ * @throws PersistanceException
+ */
 	public boolean doesSizeIdExists(int sizeId) throws PersistanceException {
 	        Connection connection = null;
 	        PreparedStatement ps = null;

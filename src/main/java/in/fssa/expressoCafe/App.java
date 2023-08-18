@@ -94,21 +94,21 @@ public class App {
 //		Product product = new Product();
 //		product = productService.findProductWithProductId(11);
 //		System.out.print(product.toString());
-		Product product =  new Product();
-		PriceService price = new PriceService();
-		product = price.updatePrice(10, 3,231.99);
-		if(product!=null) {
-		System.out.println("Product ID: " + product.getProduct_id());
-		System.out.println("Name: " + product.getName());
-		System.out.println("Description: " + product.getDescription());
-		   List<Price> updatedPrices = product.getPriceList();
-	        for (Price price1 : updatedPrices) {
-	            System.out.println("Price ID: " + price1.getPriceId());
-	            System.out.println("Price: $" + price1.getPrice());
-	            System.out.println("Size: " + price1.getSize());
-	            System.out.println("------------------------------");
-	        }
-		}
+//		Product product =  new Product();
+//		PriceService price = new PriceService();
+//		product = price.updatePrice(10, 3,231.99);
+//		if(product!=null) {
+//		System.out.println("Product ID: " + product.getProduct_id());
+//		System.out.println("Name: " + product.getName());
+//		System.out.println("Description: " + product.getDescription());
+//		   List<Price> updatedPrices = product.getPriceList();
+//	        for (Price price1 : updatedPrices) {
+//	            System.out.println("Price ID: " + price1.getPriceId());
+//	            System.out.println("Price: $" + price1.getPrice());
+//	            System.out.println("Size: " + price1.getSize());
+//	            System.out.println("------------------------------");
+//	        }
+//		}
 
 //		  	PriceService priceDAO = new PriceService();
 //	        int productId =  11; // Replace with the actual product ID
@@ -126,41 +126,41 @@ public class App {
 //	        }	
 
 		// create product
-//        ProductService productService = new ProductService();
-//        
-//        // Create a Product instance
-//        Product product = new Product();
-//        product.setName("hello");
-//        product.setDescription("Delicious coffee beverage");
-//        
-//        Category category = new Category();
-//        category.setCategoryId(11);
-//
-//        List<Price> priceList = new ArrayList<>();
-//
-//        // Create Price instances for different sizes
-//        Price priceSmall = new Price();
-//        priceSmall.setPrice(3.99);
-//        priceSmall.setSize(SizeEnum.SMALL);
-//
-//        Price priceMedium = new Price();
-//        priceMedium.setPrice(4.99);
-//        priceMedium.setSize(SizeEnum.MEDIUM);
-//
-//        Price priceLarge = new Price();
-//        priceLarge.setPrice(5.99);
-//        priceLarge.setSize(SizeEnum.LARGE);
-//        
-//        priceList.add(priceLarge);
-//        priceList.add(priceMedium);
-//        priceList.add(priceSmall);
-//
-//        // Add Price instances to the Product's priceList
-//        product.setPriceList(priceList);
-//        product.setCategory(category);
-//        productService.createProduct(product); 
+        ProductService productService = new ProductService();
+        
+        // Create a Product instance
+        Product product = new Product();
+        product.setName("FrappyLava");
+        product.setDescription("Delicious coffee beverage");
+        
+        Category category = new Category();
+        category.setCategoryId(10);
 
-		// update [roduct
+        List<Price> priceList = new ArrayList<>();
+
+        // Create Price instances for different sizes
+        Price priceSmall = new Price();
+        priceSmall.setPrice(3.99);
+        priceSmall.setSize(SizeEnum.SMALL);
+
+        Price priceMedium = new Price();
+        priceMedium.setPrice(4.99);
+        priceMedium.setSize(SizeEnum.MEDIUM);
+
+        Price priceLarge = new Price();
+        priceLarge.setPrice(5.99);
+        priceLarge.setSize(SizeEnum.LARGE);
+        
+        priceList.add(priceLarge);
+        priceList.add(priceMedium);
+        priceList.add(priceSmall);
+
+        // Add Price instances to the Product's priceList
+        product.setPriceList(priceList);
+        product.setCategory(category);
+        productService.createProduct(product); 
+
+		// update product
 //        ProductService productService1 = new ProductService();
 //        
 //        // Create a Product instance

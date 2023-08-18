@@ -25,7 +25,7 @@ public class TestCreateProduct {
 	  @Test
 	    void testCreateProductWithNullProduct() {
 	        ProductService productService = new ProductService();
-	        ServiceException exception = assertThrows(ServiceException.class, () -> productService.createProduct(null));
+	        ValidationException exception = assertThrows(ValidationException.class, () -> productService.createProduct(null));
 	        assertEquals("Product is null.", exception.getMessage());
 	    }
 	  
@@ -60,7 +60,7 @@ public class TestCreateProduct {
 
 		Product product3 = new Product();
 
-		product3.setName("Cappu87787gjhjhhjgjhg32cv88ci7no");
+		product3.setName("StrawberryFrappucino");
 		product3.setDescription("Feel refreshed");
 		product3.setPriceList(priceList);
 		product3.setCategory(category);
@@ -77,7 +77,7 @@ public class TestCreateProduct {
         
 		ProductService prodService = new ProductService();
         Product product = new Product();
-        product.setName("cappu");
+        product.setName("Frappy");
         product.setDescription("Test Description");
 
     	
@@ -104,12 +104,12 @@ public class TestCreateProduct {
         product.setPriceList(priceList);
         product.setCategory(category);
 
-        ServiceException exception =assertThrows(ServiceException.class, () -> prodService.createProduct(product));
+        ValidationException exception =assertThrows(ValidationException.class, () -> prodService.createProduct(product));
         assertEquals("Product name already Exists", exception.getMessage());
     }
 	
 	 @Test
-	    void testCreateProductWithInvalidSize() {
+	    void testCreateProductWithNullSize() {
 	        Product product = new Product();
 	        product.setName("cappu");
 	        product.setDescription("cappu is good");
@@ -124,9 +124,11 @@ public class TestCreateProduct {
 	        product.setPriceList(priceList);
 
 	        ProductService productService = new ProductService();
-			ServiceException exception = assertThrows(ServiceException.class, () -> productService .createProduct(product));
+			ValidationException exception = assertThrows(ValidationException.class, () -> productService .createProduct(product));
 	        assertEquals("SizeEnum cannot be null", exception.getMessage());
 	    }
+	
+	
 	
 	 @Test
 	 void testCreateProductWithInvalidPrice() {
@@ -145,7 +147,7 @@ public class TestCreateProduct {
 
 	     product.setPriceList(priceList);
 	     	ProductService productService =  new ProductService();
-	     	ServiceException exception = assertThrows(ServiceException.class, () -> productService.createProduct(product)
+	     	ValidationException exception = assertThrows(ValidationException.class, () -> productService.createProduct(product)
 	            );
 	     
 	     String expectedMessage = "Invalid price: " + priceSmall.getPrice();
@@ -169,7 +171,7 @@ public class TestCreateProduct {
 
 	        product.setPriceList(priceList);
 	        ProductService productService =  new ProductService();
-	        ServiceException exception = assertThrows(ServiceException.class, () -> productService.createProduct(product));
+	        ValidationException exception = assertThrows(ValidationException.class, () -> productService.createProduct(product));
 	        assertEquals("Product Name cannot be null or empty", exception.getMessage());
 	    }
 	    
@@ -185,7 +187,7 @@ public class TestCreateProduct {
 
 	        product.setPriceList(priceList);
 	        ProductService productService =  new ProductService();
-	        ServiceException exception = assertThrows(ServiceException.class, () -> productService.createProduct(product));
+	        ValidationException exception = assertThrows(ValidationException.class, () -> productService.createProduct(product));
 	        assertEquals("Prices for all sizes (small, medium, large) are required.", exception.getMessage());
 	    }
 	    
@@ -218,7 +220,7 @@ public class TestCreateProduct {
 	        product.setCategory(category);
 	        product.setPriceList(priceList);
 	        ProductService productService =  new ProductService();
-	        ServiceException exception = assertThrows(ServiceException.class,
+	        ValidationException exception = assertThrows(ValidationException.class,
 	                () -> productService.createProduct(product));
 	        assertEquals("Category ID must be non-negative", exception.getMessage());
 	    }
@@ -251,7 +253,7 @@ public class TestCreateProduct {
 
 	        product.setCategory(category);
 	        ProductService productService =  new ProductService();
-	        ServiceException exception = assertThrows(ServiceException.class,
+	        ValidationException exception = assertThrows(ValidationException.class,
 	                () -> productService.createProduct(product));
 	        assertEquals("Invalid CategoryId", exception.getMessage());
 	    }
@@ -282,7 +284,7 @@ public class TestCreateProduct {
 
 	        product.setCategory(category);
 	        ProductService productService =  new ProductService();
-	        ServiceException exception = assertThrows(ServiceException.class,
+	        ValidationException exception = assertThrows(ValidationException.class,
 	                () -> productService.createProduct(product));
 	        assertEquals("Category object cannot be null", exception.getMessage());
 	    }

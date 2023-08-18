@@ -19,7 +19,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class PriceDAO {
-
+/**
+ * 
+ * @param price
+ * @throws PersistanceException
+ */
 	public void createProductPrices(Price price) throws PersistanceException {
 
 		Connection con = null;
@@ -27,13 +31,15 @@ public class PriceDAO {
 
 		try {
 			
-			String query = "INSERT INTO price (price, size_id, product_id) VALUES (?, ?, ?)";
+			String query = "INSERT INTO price (price, size_id, product_id,start_date) VALUES (?, ?, ?,?)";
 
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
 			ps.setDouble(1, price.getPrice());
 			ps.setInt(2, price.getSize().getSizeId()); // Assuming SizeEnum values match database values
 			ps.setInt(3, price.getProduct().getProduct_id());
+			System.out.println(price.getProduct().getCreatedDate());
+			ps.setTimestamp(4, price.getProduct().getCreatedDate());
 			ps.executeUpdate();
 
 			System.out.print("Product is successfully created with its prices");
@@ -47,7 +53,12 @@ public class PriceDAO {
 		}
 	}
 
-	
+	/**
+	 * 
+	 * @param productId
+	 * @return
+	 * @throws PersistanceException
+	 */
 
 	/// method for getAllproducts for categoryId;
 	 public List<Price> getPricesForProduct(int productId) throws PersistanceException {
@@ -128,6 +139,12 @@ public class PriceDAO {
 //		return product1;
 //	}
 	
+	 /**
+	  * 
+	  * @param priceId
+	  * @param dateTime
+	  * @throws PersistanceException
+	  */
 	public void UpdatePrice(int priceId, Timestamp dateTime)throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -151,7 +168,13 @@ public class PriceDAO {
 			ConnectionUtil.close(con, ps);
 		}
 	}
-
+/**
+ * 
+ * @param productId
+ * @param sizeId
+ * @return
+ * @throws PersistanceException
+ */
 	public int findPriceByProductIdAndSizeId(int productId, int sizeId) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -186,6 +209,13 @@ public class PriceDAO {
 		return price;
 	}
 
+	/**
+	 * 
+	 * @param productId
+	 * @param sizeId
+	 * @return
+	 * @throws PersistanceException
+	 */
 	public int checkIfPriceExistForProductWithUniqueSize(int productId, int sizeId) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -218,7 +248,14 @@ public class PriceDAO {
 		}
 		return priceId;
 	}
-
+/**
+ * 
+ * @param product_id
+ * @param size_id
+ * @param price
+ * @param dateTime
+ * @throws PersistanceException
+ */
 	public void SetNewPrice(int product_id, int size_id, double price, Timestamp dateTime) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -244,7 +281,13 @@ public class PriceDAO {
 		}
 
 	}
-
+/**
+ * 
+ * @param productId
+ * @param sizeId
+ * @return
+ * @throws PersistanceException
+ */
 	public List<Price> getAllPriceHistoryWithSizeID(int productId, int sizeId) throws PersistanceException {
 		List<Price> priceHistory = new ArrayList<>();
 		Connection con = null;
@@ -288,7 +331,12 @@ public class PriceDAO {
 
 		return priceHistory;
 	}
-
+/**
+ * 
+ * @param productId
+ * @return
+ * @throws PersistanceException
+ */
 	public List<Price> getAllPriceHistory(int productId) throws PersistanceException {
 		List<Price> priceHistory = new ArrayList<>();
 		Connection con = null;

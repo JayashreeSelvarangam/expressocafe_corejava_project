@@ -14,7 +14,12 @@ import in.fssa.expressoCafe.model.CategoryEntity;
 import in.fssa.expressoCafe.util.ConnectionUtil;
 
 public class CategoryDAO {
-
+/**
+ * 
+ * @param categoryId
+ * @return
+ * @throws ValidationException
+ */
 	public Category getCategoryById(int categoryId) throws ValidationException {
 		 String query = "SELECT * FROM category WHERE cate_id = ?";
 	        Connection connection = null;
@@ -48,7 +53,12 @@ public class CategoryDAO {
 	        return category;
 			
 	    }
-	
+	/**
+	 * 
+	 * @param cate_id
+	 * @return
+	 * @throws PersistanceException
+	 */
 	public boolean doesCategoryExist(int cate_id) throws PersistanceException {
 		Connection connection = null;
 	    PreparedStatement ps = null;
@@ -81,7 +91,10 @@ public class CategoryDAO {
 	    }
 	    return value;
 	}
-
+/**
+ * 
+ * @return
+ */
 	
 	public List<Category> getAllCategories() {
         String query = "SELECT * FROM category";

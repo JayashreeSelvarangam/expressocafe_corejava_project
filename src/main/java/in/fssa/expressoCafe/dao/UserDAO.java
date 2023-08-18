@@ -7,8 +7,16 @@ import in.fssa.expressoCafe.interfaces.UserDAOInterface;
 import in.fssa.expressoCafe.model.UserEntity;
 import in.fssa.expressoCafe.util.ConnectionUtil;
 public class UserDAO implements UserDAOInterface{
+
+    /**
+     * Creates a new user in the database.
+     *
+     * @param user The UserEntity containing user information.
+     * @return The created UserEntity if successful, null if creation fails.
+     */
 	@Override
     public UserEntity createUser(UserEntity user) {
+		
         String insertQuery = "INSERT INTO users (name, phone_number, email, password, address) VALUES (?, ?, ?, ?, ?)";
         Connection connection = null;
         PreparedStatement ps = null;
@@ -35,6 +43,12 @@ public class UserDAO implements UserDAOInterface{
             ConnectionUtil.close(connection, ps);
         }
     }
+	 /**
+     * Checks if an email address exists in the database.
+     *
+     * @param email The email address to be checked.
+     * @return true if the email address exists, false otherwise.
+     */
 	 @Override
 	    public boolean doesEmailExist(String email) {
 	        String query = "SELECT COUNT(*) FROM users WHERE email = ?";

@@ -8,6 +8,11 @@ import in.fssa.expressoCafe.model.CategoryEntity;
 import in.fssa.expressoCafe.util.IntUtil;
 
 public class CategoryValidator {
+	/**
+	 * 
+	 * @param category
+	 * @throws ValidationException
+	 */
     public static void validateCategory(CategoryEntity category) throws ValidationException {
     	
     	
@@ -18,13 +23,22 @@ public class CategoryValidator {
       //  validateCategoryName(category.getCategoryName());
       
     }
+    /**
+     * 
+     * @param category
+     * @throws ValidationException
+     */
     public static void validateCategory1(CategoryEntity category) throws ValidationException {
     	   
         if (category == null) {
             throw new ValidationException("Category object cannot be null");
         }
     }
-
+/**
+ * 
+ * @param categoryId
+ * @throws ValidationException
+ */
     public static void validateCategoryId(int categoryId) throws ValidationException {
         if (categoryId <= 0) {
             throw new ValidationException("Category ID must be non-negative");
@@ -37,7 +51,11 @@ public class CategoryValidator {
 //            throw new ValidationException("Category name cannot be null or empty");
 //        }
 //    }
-    
+    /**
+     * 
+     * @param category_id
+     * @throws ValidationException
+     */
     public static void isCategoryIdValid(int category_id) throws ValidationException {
 
 		try {

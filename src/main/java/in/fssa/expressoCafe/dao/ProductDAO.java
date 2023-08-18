@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 //import in.fssa.expressoCafe.service.ProductEntity;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,44 +24,105 @@ import java.util.Map;
 import in.fssa.expressoCafe.util.ConnectionUtil;
 
 public class ProductDAO {
-	public int createProduct(Product product) throws PersistanceException {
+//	public 	Product createProduct1(Product product) throws PersistanceException {
+//
+//		
+//		Connection connection = null;
+//		PreparedStatement ps = null;
+//		ResultSet generatedKeys = null;
+//	//	Product productObj = null ; 
+//		int productId = -1;
+//	
+//
+//		try {
+//			connection = ConnectionUtil.getConnnetion();
+//			String insertProductQuery = "INSERT INTO product (name, description,category_id) VALUES (?, ?,?)";
+//			ps = connection.prepareStatement(insertProductQuery, PreparedStatement.RETURN_GENERATED_KEYS);
+//			ps.setString(1, product.getName());
+//			ps.setString(2, product.getDescription());
+//			ps.setInt(3, product.getCategory().getCategoryId());
+//			
+//			int rowsAffected = ps.executeUpdate();
+//			if (rowsAffected > 0) {
+//				generatedKeys = ps.getGeneratedKeys();
+//				if (generatedKeys.next()) {
+//					productId = generatedKeys.getInt(1);
+//					
+//				} else {
+//					throw new PersistanceException("Creating product failed, no ID obtained.");
+//				}
+//
+//			} else {
+//				System.out.print("Product creation failed");
+//				throw new PersistanceException("Product creation failed");
+//			}
+//		} catch (SQLException e) {
+//			throw new PersistanceException("Error while creating product");
+//		} finally {
+//			ConnectionUtil.close(connection, ps, generatedKeys);
+//		}
+//		return product;
+//	}
 
-		
-		Connection connection = null;
-		PreparedStatement ps = null;
-		ResultSet generatedKeys = null;
+//temp//
+	/**
+	 * 
+	 * @param product
+	 * @return
+	 * @throws PersistanceException
+	 */
+	public Product createProduct(Product product) throws PersistanceException {
+	    Connection connection = null;
+	    PreparedStatement ps = null;
+	    ResultSet generatedKeys = null;
+	    int productId = -1;
+	    Timestamp startDate = null; // To store the start date
 
-		int productId = -1;
+	    try {
+	        connection = ConnectionUtil.getConnnetion();
+	        String insertProductQuery = "INSERT INTO product (name, description, category_id, created_date) VALUES (?, ?, ?, ?)";
+	        ps = connection.prepareStatement(insertProductQuery, PreparedStatement.RETURN_GENERATED_KEYS);
+	        ps.setString(1, product.getName());
+	        ps.setString(2, product.getDescription());
+	        ps.setInt(3, product.getCategory().getCategoryId());
+	       
+	        // Set the current timestamp as the start date
+	        startDate = new Timestamp(System.currentTimeMillis());
+	        ps.setTimestamp(4, startDate);
+	        
+	        int rowsAffected = ps.executeUpdate();
+	        if (rowsAffected > 0) {
+	            generatedKeys = ps.getGeneratedKeys();
+	            if (generatedKeys.next()) {
+	                productId = generatedKeys.getInt(1);
+	                
+	                // Set the generated product ID and start date in the product object
+	                product.setProduct_id(productId);
+	                System.out.print(startDate);
+	                product.setCreatedDate(startDate);
+	            } else {
+	                throw new PersistanceException("Creating product failed, no ID obtained.");
+	            }
 
-		try {
-			connection = ConnectionUtil.getConnnetion();
-			String insertProductQuery = "INSERT INTO product (name, description,category_id) VALUES (?, ?,?)";
-			ps = connection.prepareStatement(insertProductQuery, PreparedStatement.RETURN_GENERATED_KEYS);
-			ps.setString(1, product.getName());
-			ps.setString(2, product.getDescription());
-			ps.setInt(3, product.getCategory().getCategoryId());
-			int rowsAffected = ps.executeUpdate();
-			if (rowsAffected > 0) {
-				generatedKeys = ps.getGeneratedKeys();
-				if (generatedKeys.next()) {
-					productId = generatedKeys.getInt(1);
-				} else {
-					throw new PersistanceException("Creating product failed, no ID obtained.");
-				}
-
-			} else {
-				System.out.print("Product creation failed");
-				throw new PersistanceException("Product creation failed");
-			}
-		} catch (SQLException e) {
-			throw new PersistanceException("Error while creating product");
-		} finally {
-			ConnectionUtil.close(connection, ps, generatedKeys);
-		}
-		return productId;
+	        } else {
+	            System.out.print("Product creation failed");
+	            throw new PersistanceException("Product creation failed");
+	        }
+	    } catch (SQLException e) {
+	        throw new PersistanceException("Error while creating product");
+	    } finally {
+	        ConnectionUtil.close(connection, ps, generatedKeys);
+	    }
+	    return product;
 	}
-
-
+////
+	
+	/**
+	 * 
+	 * @return
+	 * @throws PersistanceException
+	 */
+	
 	// this method get all product name
 	public List<String> getAllProductName() throws PersistanceException {
 		List<String> productsName = new ArrayList<>();
@@ -94,7 +156,14 @@ public class ProductDAO {
 	// check whether the product id and category id is valid int
 	// check whether the productName and product description is not null and valid
 	// string
-
+/**
+ * 
+ * @param product_id
+ * @param productName
+ * @param productDescription
+ * @param cate_id
+ * @throws PersistanceException
+ */
 	public void updateProduct(int product_id, String productName, String productDescription, int cate_id)
 			throws PersistanceException {
 		Connection connection = null;
@@ -129,7 +198,12 @@ public class ProductDAO {
 			ConnectionUtil.close(connection, ps);
 		}
 	}
-
+	/**
+	 * 
+	 * @param product_id
+	 * @return
+	 * @throws PersistanceException
+	 */
 	public boolean doesProductExist(int product_id) throws PersistanceException {
 
 		Connection connection = null;
@@ -162,7 +236,11 @@ public class ProductDAO {
 		}
 		return value;
 	}
-
+/**
+ * 
+ * @param product_id
+ * @throws PersistanceException
+ */
 	public void deleteProduct(int product_id) throws PersistanceException {
 		String deleteQuery = "UPDATE product Set status = 0 WHERE product_id = ?";
 		Connection connection = null;
@@ -191,7 +269,12 @@ public class ProductDAO {
 	}
 
 	/// this method is for checking whether the product is active or not
-
+/**
+ * 
+ * @param product_id
+ * @return
+ * @throws PersistanceException
+ */
 	public boolean isActive(int product_id) throws PersistanceException {
 		String query = "SELECT status FROM product WHERE product_id = ?";
 		Connection connection = null;
@@ -224,7 +307,11 @@ public class ProductDAO {
 		}
 		return value;
 	}
-
+/**
+ * 
+ * @return
+ * @throws PersistanceException
+ */
 	public List<Product> getAllProducts() throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -262,7 +349,12 @@ public class ProductDAO {
 
 		return products;
 	}
-	
+	/**
+	 * 
+	 * @param category_id
+	 * @return
+	 * @throws PersistanceException
+	 */
 	public List<Product> getAllproductswithCategoryId(int category_id) throws PersistanceException{
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -297,7 +389,12 @@ public class ProductDAO {
 		return products;
 	}
 
-
+/**
+ * 
+ * @param productId
+ * @return
+ * @throws PersistanceException
+ */
 		public Product findProductWithProductId(int productId) throws PersistanceException {
 		   Product product = new Product();
 		    Connection connection = null;

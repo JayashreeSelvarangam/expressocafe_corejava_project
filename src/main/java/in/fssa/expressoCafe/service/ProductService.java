@@ -17,8 +17,13 @@ import in.fssa.expressoCafe.validator.CategoryValidator;
 import in.fssa.expressoCafe.validator.ProductValidator;
 
 public class ProductService {
-
-	public void createProduct(Product product) throws ServiceException, ValidationException, Exception {
+/**
+ * 
+ * @param product
+ * @throws ServiceException
+ * @throws ValidationException
+ */
+	public void createProduct(Product product) throws ServiceException, ValidationException {
 		try {
 			ProductDAO productDAO = new ProductDAO();
 			PriceService priceService = new PriceService();
@@ -37,23 +42,26 @@ public class ProductService {
 			priceList = product.getPriceList();
 
 			// create product details in product Table
-			int productId = productDAO.createProduct(product);
+			Product prod = productDAO.createProduct(product);
 			// check for the valid price
 			IntUtil.validatePriceListRelationships(product.getPriceList());
-			product.setProduct_id(productId);
-			System.out.println(productId);
+			product.setProduct_id(prod.getProduct_id());
+			
 			for (Price price1 : priceList) {
 				price1.setProduct(product);
 				priceService.createPrice(price1);
 			}
 			System.out.println("c");
-		} catch (ValidationException e) {
-			throw new ServiceException(e.getMessage());
 		} catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
 	}
-
+/**
+ * 
+ * @param product
+ * @throws ServiceException
+ * @throws ValidationException
+ */
 	public void updateProduct(Product product) throws ServiceException, ValidationException {
 		try {
 			ProductDAO productDAO = new ProductDAO();
@@ -83,7 +91,11 @@ public class ProductService {
 		}
 
 	}
-
+/**
+ * 
+ * @param product_id
+ * @throws ServiceException
+ */
 	public void deleteProduct(int product_id) throws ServiceException {
 		try {
 			ProductDAO productDAO = new ProductDAO();
@@ -100,6 +112,12 @@ public class ProductService {
 			throw new ServiceException(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws ServiceException
+	 */
 
 	public List<Product> getAllProducts1() throws ServiceException {
 		List<Product> products = null;
@@ -114,12 +132,17 @@ public class ProductService {
 				List<Price> prices = priceDao.getPricesForProduct(product.getProduct_id());
 				product.setPriceList(prices);
 			}
-
 		} catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
 		return products;
 	}
+	/**
+	 * 
+	 * @param category_id
+	 * @return
+	 * @throws ServiceException
+	 */
 
 	public List<Product> getAllproductswithCategoryId(int category_id) throws ServiceException{
 		List<Product> products = null;
@@ -144,7 +167,12 @@ public class ProductService {
 		}
 		return products;
 	}
-	
+	/**
+	 * 
+	 * @param productId
+	 * @return
+	 * @throws ServiceException
+	 */
 	public Product findProductWithProductId(int productId) throws ServiceException {
 		Product product = null;
 		try {
@@ -171,7 +199,11 @@ public class ProductService {
 	}
 
 //	// get all product name
-
+/**
+ * 
+ * @return
+ * @throws ServiceException
+ */
 	public List<String> getAllProductName() throws ServiceException {
 		try {
 			ProductDAO productDao = new ProductDAO();

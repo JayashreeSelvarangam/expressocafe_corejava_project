@@ -15,6 +15,11 @@ import in.fssa.expressoCafe.util.StringUtil;
 
 public class ProductValidator {
 	// validate for the product object
+/**
+ * 
+ * @param product
+ * @throws ValidationException
+ */
 	public static void Validate(Product product) throws ValidationException {
 
 		ProductValidator.Validate1(product);
@@ -23,29 +28,47 @@ public class ProductValidator {
 		// Description");
 		IntUtil.validatePriceListRelationships(product.getPriceList());
 	}
-
+/**
+ * 
+ * @param product
+ * @throws ValidationException
+ */
 	public static void Validate1(Product product) throws ValidationException {
 
 		if (product == null) {
 			throw new ValidationException("Product is null.");
 		}
 	}
+	/**
+	 * 
+	 * @param product
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
 
 	// validate whether the product already exists
 	public static void ValidateProductNameAlreadyExists(Product product) throws ValidationException, ServiceException {
 		try {
 			ProductService prodservice = new ProductService();
 			List<String> productName = prodservice.getAllProductName();
+			
 			if (productName.contains(product.getName())) {
+			
 				throw new ValidationException("Product name already Exists");
+				
 			}
+			System.out.println("heloo everyone");
 		} catch (ValidationException e) {
 			throw new ValidationException("Product name already Exists");
 		} catch (ServiceException e) {
 			throw new ValidationException("Product name already Exists");
 		}
 	}
-
+/**
+ * 
+ * @param productid
+ * @throws ValidationException
+ */
 
 	public static void isProductIdValid(int productid) throws ValidationException {
 

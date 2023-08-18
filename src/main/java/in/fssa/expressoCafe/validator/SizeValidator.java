@@ -7,6 +7,11 @@ import in.fssa.expressoCafe.exception.ValidationException;
 import in.fssa.expressoCafe.model.Size;
 
 public class SizeValidator {
+	/**
+	 * 
+	 * @param size
+	 * @throws ValidationException
+	 */
 	public static void validateSize(Size size) throws ValidationException {
         if (size == null) {
             throw new ValidationException("Size object cannot be null");
@@ -14,7 +19,11 @@ public class SizeValidator {
         validateSizeId(size.getSizeId());
         validateSizeName(size.getSizeName());
     }
-
+/**
+ * 
+ * @param sizeId
+ * @throws ValidationException
+ */
     public static void validateSizeId(int sizeId) throws ValidationException {
         if (sizeId <= 0) {
             throw new ValidationException("Size ID must be non-negative");
@@ -27,7 +36,11 @@ public class SizeValidator {
         }
     }
     
-
+/**
+ * 
+ * @param sizeId
+ * @throws ValidationException
+ */
 	public static void isSizeIdValid(int sizeId) throws ValidationException {
 
 		try {

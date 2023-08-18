@@ -10,7 +10,11 @@ import in.fssa.expressoCafe.model.Price;
 import in.fssa.expressoCafe.model.SizeEnum;
 
 public class IntUtil {
-
+/**
+ * 
+ * @param phoneNumber
+ * @throws ValidationException
+ */
 	public static void rejectIfInvalidPhoneNumber(long phoneNumber) throws ValidationException {
 
 		if (phoneNumber < 6000000000L || phoneNumber > 9999999999L) {
@@ -18,7 +22,12 @@ public class IntUtil {
 		}
 
 	}
-
+/**
+ * 
+ * @param input
+ * @param inputName
+ * @throws ValidationException
+ */
 	public static void rejectIfInvalidInt(double input, String inputName) throws ValidationException {
 		System.out.print(false);
 		if (input <= 0) {
@@ -26,13 +35,22 @@ public class IntUtil {
 		}
 		System.out.print(false);
 	}
-
+/**
+ * 
+ * @param input
+ * @param inputName
+ * @throws ValidationException
+ */
 	public static void priceCheck(int input, String inputName) throws ValidationException {
 		if(input < 0 || input > 1000) {
 			throw new ValidationException("Invalid ".concat(inputName));
 		}
 	}
-
+/**
+ * 
+ * @param priceList
+ * @throws ValidationException
+ */
 	public static void validatePriceListRelationships(List<Price> priceList) throws ValidationException {
 		double smallPrice = 0;
 		double mediumPrice = 0;

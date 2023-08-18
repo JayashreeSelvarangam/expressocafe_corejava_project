@@ -22,7 +22,12 @@ import in.fssa.expressoCafe.validator.ProductValidator;
 import in.fssa.expressoCafe.validator.SizeValidator;
 
 public class PriceService {
-
+/**
+ * 
+ * @param price
+ * @throws ServiceException
+ * @throws ValidationException
+ */
 	public void createPrice(Price price) throws ServiceException, ValidationException {
 		try {
 
@@ -37,7 +42,12 @@ public class PriceService {
 			throw new ServiceException(e.getMessage());
 		}
 	}
-
+/**
+ * 
+ * @param productId
+ * @return
+ * @throws ServiceException
+ */
 	public List<Price> getHistoryOfProuct(int productId) throws ServiceException {
 		List<Price> priceList = null;
 		try {
@@ -53,7 +63,13 @@ public class PriceService {
 		}
 		return priceList;
 	}
-
+/**
+ * 
+ * @param productId
+ * @param sizeId
+ * @return
+ * @throws ServiceException
+ */
 	public List<Price> getHistoryOfProuctWithUniqueSize(int productId, int sizeId) throws ServiceException {
 		List<Price> priceList = null;
 		try {
@@ -76,7 +92,15 @@ public class PriceService {
 		}
 		return priceList;
 	}
-
+/**
+ * 
+ * @param productId
+ * @param size_id
+ * @param price
+ * @return
+ * @throws ValidationException
+ * @throws ServiceException
+ */
 	public Product updatePrice(int productId, int size_id, double price) throws ValidationException, ServiceException {
 		Product product = new Product();
 		try {

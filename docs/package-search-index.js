@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"in.fssa.expressoCafe.dao"},{"l":"in.fssa.expressoCafe.exception"},{"l":"in.fssa.expressoCafe.interfaces"},{"l":"in.fssa.expressoCafe.model"},{"l":"in.fssa.expressoCafe.service"},{"l":"in.fssa.expressoCafe.util"},{"l":"in.fssa.expressoCafe.validator"}];updateSearchResults();

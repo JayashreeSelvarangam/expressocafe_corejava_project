@@ -1,5 +1,6 @@
 package in.fssa.expressoCafe.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public class Product {
 	private SizeEnum size;
 	private Category category;
 	private List<Price> priceList = new ArrayList<>();
-	private LocalDateTime createdDate;
+	private Timestamp createdDate;
 
 	
 	public int getProduct_id() {
@@ -61,12 +62,13 @@ public class Product {
 	public void setPriceList(List<Price> priceList) {
 		this.priceList = priceList;
 	}
-	public LocalDateTime getCreatedDate() {
+	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
-	public void setCreatedDate(LocalDateTime createdDate) {
+	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
+
 	
 	
 }

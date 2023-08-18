@@ -13,13 +13,22 @@ import in.fssa.expressoCafe.util.IntUtil;
 import in.fssa.expressoCafe.validator.CategoryValidator;
 
 public class CategoryService  {
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public List<Category> getAllCategories() {
 	    	CategoryDAO categoryDAO = new CategoryDAO();
 	    	return categoryDAO.getAllCategories();
 	    }
 
-
+/**
+ * 
+ * @param categoryId
+ * @return
+ * @throws ServiceException
+ * @throws ValidationException
+ */
 	  public CategoryEntity getCategoryById(int categoryId) throws ServiceException, ValidationException {
 		 
 		  CategoryDAO categoryDAO = new CategoryDAO();
@@ -29,7 +38,11 @@ public class CategoryService  {
 	      return categoryDAO.getCategoryById(categoryId);
 		  
 	    }
-	
+	/**
+	 * 
+	 * @param category_id
+	 * @throws ValidationException
+	 */
 	// this method check whether the category id exists but it does not return anything  
 	  public void isCategoryIdValid(int category_id) throws ValidationException {
 			CategoryValidator.isCategoryIdValid(category_id);
