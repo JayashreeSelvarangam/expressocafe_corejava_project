@@ -22,7 +22,7 @@ public class TestDeleteProduct {
 	
 	@Test
 	void testDeleteProductWithValidId() {
-		int productId = 53;
+		int productId = 12;
 		ProductService productService = new ProductService();
 		assertDoesNotThrow(() -> productService.deleteProduct(productId));
 	}

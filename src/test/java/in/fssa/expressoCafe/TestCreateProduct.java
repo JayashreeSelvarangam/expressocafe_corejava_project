@@ -54,7 +54,7 @@ public class TestCreateProduct {
 		priceList.add(priceLarge);
 
 		Category category = new Category();
-		category.setCategoryId(11);
+		category.setCategoryId(4);
 
 		Product product3 = new Product();
 
@@ -75,11 +75,11 @@ public class TestCreateProduct {
 
 		ProductService prodService = new ProductService();
 		Product product = new Product();
-		product.setName("CaramelFrappucino");
+		product.setName("JavaChip");
 		product.setDescription("Test Description");
 
 		Category category = new Category();
-		category.setCategoryId(11);
+		category.setCategoryId(4);
 
 		Price priceSmall = new Price();
 		priceSmall.setPrice(10.0);
@@ -115,7 +115,7 @@ public class TestCreateProduct {
 		product.setDescription("Test Description");
 
 		Category category = new Category();
-		category.setCategoryId(11);
+		category.setCategoryId(4);
 
 		Price priceSmall = new Price();
 		priceSmall.setPrice(10.0);
@@ -151,7 +151,7 @@ public class TestCreateProduct {
 		product.setDescription("");
 
 		Category category = new Category();
-		category.setCategoryId(11);
+		category.setCategoryId(4);
 
 		Price priceSmall = new Price();
 		priceSmall.setPrice(10.0);
@@ -186,7 +186,7 @@ public class TestCreateProduct {
 		product.setDescription(null);
 
 		Category category = new Category();
-		category.setCategoryId(11);
+		category.setCategoryId(4);
 
 		Price priceSmall = new Price();
 		priceSmall.setPrice(10.0);
@@ -361,7 +361,7 @@ public class TestCreateProduct {
 	@Test
 	void testCreateProductWithCategoryIsNull() {
 		Product product = new Product();
-		product.setName("cappphhhu");
+		product.setName(generateRandomProductName());
 		product.setDescription("Test Description");
 		List<Price> priceList = new ArrayList<>();
 		Category category = null; // Assuming category ID 10 does not exist
@@ -386,6 +386,8 @@ public class TestCreateProduct {
 		ProductService productService = new ProductService();
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> productService.createProduct(product));
+		System.out.println(exception.getMessage());
+		
 		assertEquals("Category object cannot be null", exception.getMessage());
 	}
 	

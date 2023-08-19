@@ -22,14 +22,14 @@ import in.fssa.expressoCafe.service.ProductService;
 
 		void testGetProductWithExistingProductId() {
 
-			int productId = 54;
+			int productId = 11;
 			ProductService productService = new ProductService();
 			assertDoesNotThrow(() -> productService.findProductWithProductId(productId));
 		}
 		
 		@Test
 	    void testGetProductWithExistingCategoryId() {
-			int cateId = 11;
+			int cateId = 4;
 	        ProductService productService =  new ProductService();
 	        assertDoesNotThrow(() -> productService.getAllproductswithCategoryId(cateId));
 	    }

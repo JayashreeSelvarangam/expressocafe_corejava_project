@@ -18,7 +18,7 @@ public class TestCategory {
 		CategoryService categoryservice = new CategoryService();
 		
 		assertDoesNotThrow(() -> {
-			categoryservice.getCategoryById(11);
+			categoryservice.getCategoryById(1);
 		});
 	}
 	
@@ -55,7 +55,7 @@ public class TestCategory {
 		CategoryService categoryservice = new CategoryService();
 		
 		Exception exception = assertThrows(ServiceException.class, () ->{
-			categoryservice.getCategoryById(5);
+			categoryservice.getCategoryById(7);
 		});
 		String expectedMessage = "category does not exists";
 		String actualMessage = exception.getMessage();

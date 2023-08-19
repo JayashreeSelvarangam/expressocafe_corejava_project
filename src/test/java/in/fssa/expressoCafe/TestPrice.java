@@ -25,13 +25,13 @@ public class TestPrice {
 	        PriceService priceService = new PriceService();
 
 	        // Act and Assert
-	        assertDoesNotThrow(() -> priceService.updatePrice(45, 3, randomNumber));
+	        assertDoesNotThrow(() -> priceService.updatePrice(11, 3, randomNumber));
 	    }
 	@Test
 	void testUpdatePriceInvalidProductId() {
 		PriceService priceService = new PriceService();
 
-		ValidationException exception = assertThrows(ValidationException.class, () -> priceService.updatePrice(-1, 11, 9.99));
+		ValidationException exception = assertThrows(ValidationException.class, () -> priceService.updatePrice(-1, 3, 9.99));
 		assertEquals("Invalid ProductId", exception.getMessage());
 	}
 
@@ -40,7 +40,7 @@ public class TestPrice {
 		PriceService priceService = new PriceService();
 
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> priceService.updatePrice(41, -1, 9.99));
+				() -> priceService.updatePrice(11, -1, 9.99));
 		assertEquals("Invalid SizeId", exception.getMessage());
 	}
 
@@ -49,7 +49,7 @@ public class TestPrice {
 		PriceService priceService = new PriceService();
 
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> priceService.updatePrice(999, 11, -9.99));
+				() -> priceService.updatePrice(999, 2, -9.99));
 		assertEquals("Invalid Price", exception.getMessage());
 	}
 
@@ -58,7 +58,7 @@ public class TestPrice {
 		PriceService priceService = new PriceService();
 
 		ServiceException exception = assertThrows(ServiceException.class,
-				() -> priceService.updatePrice(999, 11, 9.99));
+				() -> priceService.updatePrice(999, 1, 9.99));
 		assertEquals("product does not exist", exception.getMessage());
 	}
 
@@ -68,7 +68,7 @@ public class TestPrice {
 		PriceService priceService = new PriceService();
 
 		ServiceException exception = assertThrows(ServiceException.class,
-				() -> priceService.updatePrice(41, 999, 9.99));
+				() -> priceService.updatePrice(11, 999, 9.99));
 		assertEquals("size id does not exist", exception.getMessage());
 	}
 
@@ -95,7 +95,7 @@ public class TestPrice {
 		PriceService priceService = new PriceService();
 
 		// Act and Assert
-		assertDoesNotThrow(() -> priceService.getHistoryOfProuctWithUniqueSize(41, 1));
+		assertDoesNotThrow(() -> priceService.getHistoryOfProuctWithUniqueSize(11, 1));
 	}
 
 	@Test
@@ -131,7 +131,7 @@ public class TestPrice {
 		PriceService priceService = new PriceService();
 
 		ServiceException exception = assertThrows(ServiceException.class,
-				() -> priceService.getHistoryOfProuctWithUniqueSize(41, 999));
+				() -> priceService.getHistoryOfProuctWithUniqueSize(11, 999));
 		assertEquals("size id does not exist", exception.getMessage());
 	}
 
@@ -141,7 +141,7 @@ public class TestPrice {
 	void testGetAllPriceValidData() {
 		PriceService priceService = new PriceService();
 
-		assertDoesNotThrow(() -> priceService.getHistoryOfProuct(41));
+		assertDoesNotThrow(() -> priceService.getHistoryOfProuct(11));
 
 	}
 

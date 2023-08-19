@@ -25,13 +25,12 @@ public class TestUpdateProduct {
 		product.setName(generateRandomProductName());
 		product.setDescription("Coffee Description");
 		Category category = new Category();
-		category.setCategoryId(12);
+		category.setCategoryId(1);
 		product.setCategory(category);
-		product.setProduct_id(38);
+		product.setProduct_id(11);
 		ProductService productService = new ProductService();
 		assertDoesNotThrow(() -> productService.updateProduct(product));
 	}
-
 	// string empty
 	@Test
 	void testUpdateProductWithNullProduct() {
@@ -40,15 +39,14 @@ public class TestUpdateProduct {
 				() -> productService.updateProduct(null));
 		assertEquals("Product is null.", exception.getMessage());
 	}
-
 	@Test
 	void testUpdateProductWithNullProductName() {
 		Product product = new Product();
 		product.setDescription("Test Description");
 		Category category = new Category();
-		category.setCategoryId(11);
+		category.setCategoryId(1);
 		product.setCategory(category);
-		product.setProduct_id(56);
+		product.setProduct_id(11);
 		ProductService productService = new ProductService();
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> productService.updateProduct(product));
@@ -61,7 +59,7 @@ public class TestUpdateProduct {
 		product.setName("doppio");
 		product.setDescription("Test Description");
 		Category category = new Category();
-		category.setCategoryId(11);
+		category.setCategoryId(1);
 		product.setCategory(category);
 		product.setProduct_id(-1);
 		ProductService productService = new ProductService();
@@ -70,7 +68,6 @@ public class TestUpdateProduct {
 		System.out.println(exception.getMessage());
 		assertEquals("Invalid productId", exception.getMessage(), "Exception message should match.");
 	}
-
 //    @Test
 //    void testUpdateProductWithInvalidCategoryId() {
 //        Product product = new Product();
@@ -90,7 +87,7 @@ public class TestUpdateProduct {
 		Product product = new Product();
 		product.setName("cappp122u");
 		product.setDescription("Test Description");
-		product.setProduct_id(43);
+		product.setProduct_id(11);
 		Category category = new Category();
 		category.setCategoryId(90); // Assuming category ID 90 does not exist
 
@@ -99,7 +96,6 @@ public class TestUpdateProduct {
 		ServiceException exception = assertThrows(ServiceException.class, () -> productService.updateProduct(product));
 		assertEquals("category does not exists", exception.getMessage());
 	}
-
 	// doubt
 	@Test
 	void testUpdateProductWithCategoryIsNull() {
@@ -109,14 +105,13 @@ public class TestUpdateProduct {
 
 		Category category = null;
 
-		product.setProduct_id(43);
+		product.setProduct_id(11);
 		product.setCategory(category);
 		ProductService productService = new ProductService();
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> productService.updateProduct(product));
 		assertEquals("Category object cannot be null", exception.getMessage());
 	}
-
 	@Test
 	void testUpdateProductWithInvalidCategoryId() {
 		Product product = new Product();
@@ -126,7 +121,7 @@ public class TestUpdateProduct {
 		Category category = new Category();
 		category.setCategoryId(-1); // Invalid category ID
 		product.setCategory(category);
-		product.setProduct_id(43);
+		product.setProduct_id(11);
 		ProductService productService = new ProductService();
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> productService.updateProduct(product));
@@ -138,11 +133,11 @@ public class TestUpdateProduct {
 
 		ProductService prodService = new ProductService();
 		Product product = new Product();
-		product.setName("cappulava5");
+		product.setName("JavaChip");
 		product.setDescription("Test Description");
 
 		Category category = new Category();
-		category.setCategoryId(11);
+		category.setCategoryId(2);
 
 		Price priceSmall = new Price();
 		priceSmall.setPrice(10.0);
@@ -163,7 +158,7 @@ public class TestUpdateProduct {
 		priceList.add(priceLarge);
 		product.setPriceList(priceList);
 		product.setCategory(category);
-		product.setProduct_id(43);
+		product.setProduct_id(11);
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> prodService.updateProduct(product));
 		assertEquals("Product name already Exists", exception.getMessage());
@@ -176,7 +171,7 @@ public class TestUpdateProduct {
 		product.setDescription("Test Description");
 
 		Category category = new Category();
-		category.setCategoryId(11); // Assuming category ID 10 does not exist
+		category.setCategoryId(3); // Assuming category ID 10 does not exist
 
 		product.setCategory(category);
 		product.setProduct_id(79);
@@ -193,7 +188,6 @@ public class TestUpdateProduct {
 	            char randomChar = alphabet.charAt(index);
 	            dishName.append(Character.toUpperCase(randomChar));
 	        }
-
 	        return dishName.toString();
 	    }
 }
