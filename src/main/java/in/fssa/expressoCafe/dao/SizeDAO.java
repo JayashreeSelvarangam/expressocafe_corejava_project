@@ -47,8 +47,9 @@ public class SizeDAO {
  * 
  * @param sizeId
  * @return
+ * @throws PersistanceException 
  */
-	public Size getSizeById(int sizeId) {
+	public Size getSizeById(int sizeId) throws PersistanceException {
 
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -57,7 +58,7 @@ public class SizeDAO {
 
 		try {
 			connection = ConnectionUtil.getConnnetion();
-			String query = "SELECT * FROM sizes WHERE size_id = ?";
+			String query = "SELECT * FROM size WHERE size_id = ?";
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, sizeId);
 			rs = ps.executeQuery();
@@ -72,7 +73,7 @@ public class SizeDAO {
 			// Size not found
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new PersistanceException("Size does not exists");
 		} finally {
 			ConnectionUtil.close(connection, ps, rs);
 		}
@@ -105,7 +106,7 @@ public class SizeDAO {
 	        	catch(SQLException e){
 	        		e.printStackTrace();
 	        		System.out.print(e.getMessage());
-	        		throw new PersistanceException(e.getMessage());
+	        		throw new PersistanceException("size id does not exist");
 	        	}
 	        catch(Exception e) {
 	        	e.printStackTrace();

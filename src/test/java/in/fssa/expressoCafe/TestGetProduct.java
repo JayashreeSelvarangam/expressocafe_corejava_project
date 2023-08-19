@@ -1,5 +1,6 @@
 package in.fssa.expressoCafe;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -15,7 +16,23 @@ import in.fssa.expressoCafe.model.Product;
 import in.fssa.expressoCafe.model.SizeEnum;
 import in.fssa.expressoCafe.service.ProductService;
 
-public class TestGetProduct {
+ public class TestGetProduct {
+	 
+		@Test
+
+		void testGetProductWithExistingProductId() {
+
+			int productId = 54;
+			ProductService productService = new ProductService();
+			assertDoesNotThrow(() -> productService.findProductWithProductId(productId));
+		}
+		
+		@Test
+	    void testGetProductWithExistingCategoryId() {
+			int cateId = 11;
+	        ProductService productService =  new ProductService();
+	        assertDoesNotThrow(() -> productService.getAllproductswithCategoryId(cateId));
+	    }
 
 	@Test
 
@@ -27,8 +44,9 @@ public class TestGetProduct {
 				() -> productService.findProductWithProductId(productId));
 		assertEquals("Invalid ProductId", exception.getMessage());
 	}
+	
 	@Test
-    void testCreateProductWithNonExistingCategoryId() {
+    void testGetProductWithNonExistingCategoryId() {
 		int cateId = 907;
         ProductService productService =  new ProductService();
         ServiceException exception = assertThrows(ServiceException.class,
@@ -47,7 +65,7 @@ public class TestGetProduct {
 		assertEquals("Invalid ProductId", exception.getMessage());
 	}
 	@Test
-    void testCreateProductWithInvalidCategoryId() {
+    void testGetProductWithInvalidCategoryId() {
 		int cateId = -7;
         ProductService productService =  new ProductService();
         ServiceException exception = assertThrows(ServiceException.class,

@@ -27,8 +27,10 @@ public class ProductService {
 		try {
 			ProductDAO productDAO = new ProductDAO();
 			PriceService priceService = new PriceService();
+			CategoryDAO cate = new CategoryDAO();
 			
 			// product Validation
+			
 			ProductValidator.Validate(product);
 
 			// do it later
@@ -36,8 +38,8 @@ public class ProductService {
 
 			// category validation
 			CategoryValidator.validateCategory(product.getCategory());
-			CategoryValidator.isCategoryIdValid(product.getCategory().getCategoryId());
-
+			cate.doesCategoryExist(product.getCategory().getCategoryId());
+			
 			List<Price> priceList = new ArrayList<>();
 			priceList = product.getPriceList();
 
@@ -65,28 +67,30 @@ public class ProductService {
 	public void updateProduct(Product product) throws ServiceException, ValidationException {
 		try {
 			ProductDAO productDAO = new ProductDAO();
+			CategoryDAO cate = new CategoryDAO();
 			// form validation of productName and productDescription
 			ProductValidator.Validate1(product);
+			IntUtil.rejectIfInvalidInt(product.getProduct_id(), "productId");
+			productDAO.doesProductExist(product.getProduct_id());
 			StringUtil.rejectIfInvalidString(product.getName(), "productName");
 			ProductValidator.ValidateProductNameAlreadyExists(product);
-			ProductValidator.isProductIdValid(product.getProduct_id());
+			productDAO.doesProductExist(product.getProduct_id());
 			// category validation
 
 			CategoryValidator.validateCategory1(product.getCategory());
 			CategoryValidator.validateCategoryId(product.getCategory().getCategoryId());
-			CategoryValidator.isCategoryIdValid(product.getCategory().getCategoryId());
+			cate.doesCategoryExist(product.getCategory().getCategoryId());
 
 			// form validation for product id and category id
 			// IntUtil.rejectIfInvalidInt(product.getCategory().getCategoryId(),"CategoryId");
-			IntUtil.rejectIfInvalidInt(product.getProduct_id(), "productId");
+		
 			// product validation
 			if (productDAO.doesProductExist(product.getProduct_id())) {
 				productDAO.updateProduct(product.getProduct_id(), product.getName(), product.getDescription(),
 						product.getCategory().getCategoryId());
 			}
-		} catch (ValidationException e) {
-			throw new ServiceException(e.getMessage());
-		} catch (PersistanceException e) {
+
+		}catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
 
@@ -95,20 +99,19 @@ public class ProductService {
  * 
  * @param product_id
  * @throws ServiceException
+ * @throws ValidationException 
  */
-	public void deleteProduct(int product_id) throws ServiceException {
+	public void deleteProduct(int product_id) throws ServiceException, ValidationException {
 		try {
 			ProductDAO productDAO = new ProductDAO();
-
-			ProductValidator.isProductIdValid(product_id);
 			IntUtil.rejectIfInvalidInt(product_id, "productId");
+			productDAO.doesProductExist(product_id);
+		
 			if (productDAO.isActive(product_id)) {
 				productDAO.deleteProduct(product_id);
 			}
-		}catch (ValidationException e) {
-			throw new ServiceException(e.getMessage());
 		}
-			  catch (PersistanceException e) {
+		catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
 	}
@@ -179,7 +182,7 @@ public class ProductService {
 			ProductDAO productDao = new ProductDAO();
 			PriceDAO priceDao = new PriceDAO();
 			
-			IntUtil.rejectIfInvalidInt(productId);
+			IntUtil.rejectIfInvalidInt(productId,"ProductId");
 			ProductValidator.isProductIdValid(productId);
 						
 			product = productDao.findProductWithProductId(productId);

@@ -24,6 +24,14 @@ public class StringUtil {
 	    }
 
 	}
+	public static void rejectIfInvalidStringWithoutPattern(String input, String inputName) throws ValidationException {
+		if (input == null || "".equals(input.trim())) {
+			
+			throw new ValidationException(inputName.concat(" cannot be null or empty"));
+		}
+		
+	    
+	}
 
 	public static void rejectIfInvalidEmail(String email) throws ValidationException {
 

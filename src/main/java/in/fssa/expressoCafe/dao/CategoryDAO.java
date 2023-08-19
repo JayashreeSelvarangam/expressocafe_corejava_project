@@ -19,8 +19,9 @@ public class CategoryDAO {
  * @param categoryId
  * @return
  * @throws ValidationException
+ * @throws PersistanceException 
  */
-	public Category getCategoryById(int categoryId) throws ValidationException {
+	public Category getCategoryById(int categoryId) throws ValidationException, PersistanceException {
 		 String query = "SELECT * FROM category WHERE cate_id = ?";
 	        Connection connection = null;
 	        PreparedStatement ps = null;
@@ -39,15 +40,18 @@ public class CategoryDAO {
 	                category.setCategoryId(rs.getInt("cate_id"));
 	                category.setCategoryName(rs.getString("name"));
 	             
-	            }else {
-	            	throw new ValidationException("No category found");
 	            }
 
 	           
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            throw new RuntimeException(e);
-	        } finally {
+	        }catch (SQLException e) {
+		        e.printStackTrace();
+		        System.out.print(e.getMessage());
+		        throw new PersistanceException("category does not exists");
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        System.out.print(e.getMessage());
+		        throw new PersistanceException("category does not exists"); 	
+		    } finally {
 	            ConnectionUtil.close(connection, ps, rs);
 	        }
 	        return category;
@@ -94,9 +98,10 @@ public class CategoryDAO {
 /**
  * 
  * @return
+ * @throws PersistanceException 
  */
 	
-	public List<Category> getAllCategories() {
+	public List<Category> getAllCategories() throws PersistanceException {
         String query = "SELECT * FROM category";
         Connection connection = null;
         PreparedStatement ps = null;
@@ -115,9 +120,14 @@ public class CategoryDAO {
                 categories.add(category);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } finally {
+	        e.printStackTrace();
+	        System.out.print(e.getMessage());
+	        throw new PersistanceException("category does not exists");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        System.out.print(e.getMessage());
+	        throw new PersistanceException("category does not exists"); 	
+	    } finally {
             ConnectionUtil.close(connection, ps, rs);
         }
 

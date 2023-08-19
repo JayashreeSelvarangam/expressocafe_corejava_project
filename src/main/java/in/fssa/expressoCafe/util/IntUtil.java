@@ -28,7 +28,7 @@ public class IntUtil {
  * @param inputName
  * @throws ValidationException
  */
-	public static void rejectIfInvalidInt(double input, String inputName) throws ValidationException {
+	public static void rejectIfInvalidInt(int input, String inputName) throws ValidationException {
 		System.out.print(false);
 		if (input <= 0) {
 			throw new ValidationException("Invalid ".concat(inputName));
@@ -41,7 +41,7 @@ public class IntUtil {
  * @param inputName
  * @throws ValidationException
  */
-	public static void priceCheck(int input, String inputName) throws ValidationException {
+	public static void priceCheck(double input, String inputName) throws ValidationException {
 		if(input < 0 || input > 1000) {
 			throw new ValidationException("Invalid ".concat(inputName));
 		}
@@ -106,17 +106,17 @@ public class IntUtil {
 		}
 	}
 
-	public static void rejectIfInvalidInt(double price) {
-		// TODO Auto-generated method stub
+//	public static void rejectIfInvalidInt(double price) {
+//		// TODO Auto-generated method stub
+//
+//	}
 
-	}
-
-	public static void priceCheck(double price,String inputNmae) throws ValidationException {
-		// TODO Auto-generated method stub
-		if(price < 0 || price > 1000) {
-			throw new ValidationException("Invalid ".concat(inputNmae));
-		}
-	}
+//	public static void priceCheck(double price,String inputNmae) throws ValidationException {
+//		// TODO Auto-generated method stub
+//		if(price < 0 || price > 1000) {
+//			throw new ValidationException("Invalid ".concat(inputNmae));
+//		}
+//	}
 
 	
 }

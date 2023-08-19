@@ -24,6 +24,7 @@ public class ProductValidator {
 
 		ProductValidator.Validate1(product);
 		StringUtil.rejectIfInvalidString(product.getName(), "Product Name");
+		StringUtil.rejectIfInvalidStringWithoutPattern(product.getDescription(), "Product Description");
 		// StringUtil.rejectIfInvalidString(product.getDescription(), "Product
 		// Description");
 		IntUtil.validatePriceListRelationships(product.getPriceList());
@@ -39,6 +40,7 @@ public class ProductValidator {
 			throw new ValidationException("Product is null.");
 		}
 	}
+	
 	/**
 	 * 
 	 * @param product
@@ -64,6 +66,7 @@ public class ProductValidator {
 			throw new ValidationException("Product name already Exists");
 		}
 	}
+	
 /**
  * 
  * @param productid

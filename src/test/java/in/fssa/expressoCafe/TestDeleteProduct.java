@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import in.fssa.expressoCafe.exception.ServiceException;
+import in.fssa.expressoCafe.exception.ValidationException;
 import in.fssa.expressoCafe.model.Category;
 import in.fssa.expressoCafe.model.Price;
 import in.fssa.expressoCafe.model.Product;
@@ -21,7 +22,7 @@ public class TestDeleteProduct {
 	
 	@Test
 	void testDeleteProductWithValidId() {
-		int productId = 2;
+		int productId = 53;
 		ProductService productService = new ProductService();
 		assertDoesNotThrow(() -> productService.deleteProduct(productId));
 	}
@@ -33,7 +34,7 @@ public class TestDeleteProduct {
 		ProductService productService = new ProductService();
 		ServiceException exception = assertThrows(ServiceException.class,
 				() -> productService.deleteProduct(productId));
-		assertEquals("Invalid ProductId", exception.getMessage());
+		assertEquals("product does not exist", exception.getMessage());
 	}
 	
 	@Test
@@ -41,8 +42,19 @@ public class TestDeleteProduct {
 	void testDeleteProductWithInvalidProductId() {
 		int productId = -9;
 		ProductService productService = new ProductService();
-		ServiceException exception = assertThrows(ServiceException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> productService.deleteProduct(productId));
-		assertEquals("Invalid ProductId", exception.getMessage());
+		assertEquals("Invalid productId", exception.getMessage());
 	}
+	// needed 
+//	@Test
+//
+//	void testDeleteProductWithInactiveProductId() {
+//		int productId = 48;
+//		ProductService productService = new ProductService();
+//		ServiceException exception = assertThrows(ServiceException.class,
+//				() -> productService.deleteProduct(productId));
+//		assertEquals("Product is inactive", exception.getMessage());
+//	}
+	
 }

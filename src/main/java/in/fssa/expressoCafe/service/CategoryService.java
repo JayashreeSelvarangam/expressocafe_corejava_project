@@ -2,7 +2,7 @@ package in.fssa.expressoCafe.service;
 
 import java.util.List;
 
-import com.google.protobuf.ServiceException;
+import in.fssa.expressoCafe.exception.ServiceException;
 
 import in.fssa.expressoCafe.dao.CategoryDAO;
 import in.fssa.expressoCafe.exception.PersistanceException;
@@ -16,10 +16,20 @@ public class CategoryService  {
 	/**
 	 * 
 	 * @return
+	 * @throws PersistanceException 
+	 * @throws ServiceException 
 	 */
-	public List<Category> getAllCategories() {
+	public List<Category> getAllCategories() throws  ServiceException {
+		List <Category> cate = null ;
+		try {
+	    		
 	    	CategoryDAO categoryDAO = new CategoryDAO();
-	    	return categoryDAO.getAllCategories();
+	    	cate = categoryDAO.getAllCategories();
+	    	}
+	    	catch(PersistanceException e) {
+				 throw new ServiceException(e.getMessage());
+			 }
+		return cate;
 	    }
 
 /**
@@ -30,12 +40,18 @@ public class CategoryService  {
  * @throws ValidationException
  */
 	  public CategoryEntity getCategoryById(int categoryId) throws ServiceException, ValidationException {
-		 
+		  CategoryEntity cate = null ;
+		  try {
 		  CategoryDAO categoryDAO = new CategoryDAO();
 		  CategoryValidator category = new CategoryValidator(); // creating category Validator
 		  
 		  category.validateCategoryId(categoryId); // passing the id
-	      return categoryDAO.getCategoryById(categoryId);
+		  categoryDAO.doesCategoryExist(categoryId);
+		  cate =  categoryDAO.getCategoryById(categoryId);
+		 }catch(PersistanceException e) {
+			 throw new ServiceException(e.getMessage());
+		 }
+		return cate;
 		  
 	    }
 	/**
@@ -45,6 +61,7 @@ public class CategoryService  {
 	 */
 	// this method check whether the category id exists but it does not return anything  
 	  public void isCategoryIdValid(int category_id) throws ValidationException {
+		  CategoryValidator.validateCategoryId(category_id);
 			CategoryValidator.isCategoryIdValid(category_id);
 		}
 
