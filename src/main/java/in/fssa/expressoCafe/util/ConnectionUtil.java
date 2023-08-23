@@ -17,10 +17,14 @@ public class ConnectionUtil {
             userName = System.getenv("DATABASE_USERNAME");
             password = System.getenv("DATABASE_PASSWORD");
         } else {
-            Dotenv env = Dotenv.load();
-            url = env.get("DATABASE_HOSTNAME");
-            userName = env.get("DATABASE_USERNAME");
-            password = env.get("DATABASE_PASSWORD");
+//            Dotenv env = Dotenv.load();
+//            url = env.get("DATABASE_HOSTNAME");
+//            userName = env.get("DATABASE_USERNAME");
+//            password = env.get("DATABASE_PASSWORD");
+        	
+        	url ="jdbc:mysql://164.52.216.41:3306/jayashree_selvarangam_corejava_project";
+        	userName = "FJRF5pAEFMOa";
+        	password = "31d3ab25-ff69-44ee-928a-5d4ef7de504c"; 
         }		
 		Connection connection = null;
 		

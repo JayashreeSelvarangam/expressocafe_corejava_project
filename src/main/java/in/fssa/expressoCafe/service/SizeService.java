@@ -8,6 +8,7 @@ import in.fssa.expressoCafe.exception.ServiceException;
 import in.fssa.expressoCafe.exception.ValidationException;
 import in.fssa.expressoCafe.model.Size;
 import in.fssa.expressoCafe.util.IntUtil;
+import in.fssa.expressoCafe.validator.SizeValidator;
 
 public class SizeService {
 	/**
@@ -30,11 +31,12 @@ public class SizeService {
 	public Size getSizeById(int sizeId) throws ServiceException, ValidationException {
 		Size size = new Size();
 		try {
-			IntUtil.rejectIfInvalidInt(sizeId, "sizeId");
-
+			
+			SizeValidator.validateSizeId(sizeId);
 			SizeDAO sizeDAO = new SizeDAO();
 			sizeDAO.doesSizeIdExists(sizeId);
 			size = sizeDAO.getSizeById(sizeId);
+			
 		} catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}

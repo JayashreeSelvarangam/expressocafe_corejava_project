@@ -8,6 +8,7 @@ import in.fssa.expressoCafe.exception.PersistanceException;
 import in.fssa.expressoCafe.exception.ServiceException;
 
 import in.fssa.expressoCafe.exception.ValidationException;
+import in.fssa.expressoCafe.model.Price;
 import in.fssa.expressoCafe.model.Product;
 import in.fssa.expressoCafe.service.ProductService;
 import in.fssa.expressoCafe.util.IntUtil;
@@ -20,61 +21,50 @@ public class ProductValidator {
  * @param product
  * @throws ValidationException
  */
-	public static void Validate(Product product) throws ValidationException {
-
-		ProductValidator.Validate1(product);
+	public static void validate(Product product) throws ValidationException {
+		ProductValidator.validate1(product);
 		StringUtil.rejectIfInvalidString(product.getName(), "Product Name");
 		StringUtil.rejectIfInvalidStringWithoutPattern(product.getDescription(), "Product Description");
-		// StringUtil.rejectIfInvalidString(product.getDescription(), "Product
-		// Description");
-		IntUtil.validatePriceListRelationships(product.getPriceList());
 	}
 /**
  * 
  * @param product
  * @throws ValidationException
  */
-	public static void Validate1(Product product) throws ValidationException {
-
+	public static void validate1(Product product) throws ValidationException {
 		if (product == null) {
-			throw new ValidationException("Product is null.");
+			throw new ValidationException("Product Object is null.");
 		}
 	}
 	
+	public static void rejectIfInvalidInt (int productId, String message) throws ValidationException {
+		IntUtil.rejectIfInvalidInt(productId, message);
+	}
 	/**
 	 * 
 	 * @param product
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-
+	
 	// validate whether the product already exists
 	public static void ValidateProductNameAlreadyExists(Product product) throws ValidationException, ServiceException {
 		try {
 			ProductService prodservice = new ProductService();
 			List<String> productName = prodservice.getAllProductName();
-			
 			if (productName.contains(product.getName())) {
-			
-				throw new ValidationException("Product name already Exists");
-				
+				throw new ValidationException("Product name already exists , Create product with different name.");
 			}
-			System.out.println("heloo everyone");
-		} catch (ValidationException e) {
-			throw new ValidationException("Product name already Exists");
-		} catch (ServiceException e) {
-			throw new ValidationException("Product name already Exists");
+		}catch (ServiceException e) {
+			throw new ValidationException("Product name already exists , Create product with different name.");
 		}
 	}
-	
 /**
  * 
  * @param productid
  * @throws ValidationException
  */
-
 	public static void isProductIdValid(int productid) throws ValidationException {
-
 		try {
 			ProductDAO productdao = new ProductDAO();
 			// do it later
@@ -82,8 +72,12 @@ public class ProductValidator {
 			productdao.doesProductExist(productid);
 			System.out.print(true);
 		} catch (PersistanceException e) {
-			throw new ValidationException("Invalid ProductId");
+			throw new ValidationException("Invalid ProductId: no product exists in this product id");
 		}
+	}
+	
+	public static void validatePriceList(List<Price> priceList) throws ValidationException {
+		IntUtil.validatePriceListRelationships(priceList);
 	}
 
 }

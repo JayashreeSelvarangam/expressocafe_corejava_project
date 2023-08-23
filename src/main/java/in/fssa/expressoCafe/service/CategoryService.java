@@ -46,7 +46,7 @@ public class CategoryService  {
 		  CategoryValidator category = new CategoryValidator(); // creating category Validator
 		  
 		  category.validateCategoryId(categoryId); // passing the id
-		  categoryDAO.doesCategoryExist(categoryId);
+		  CategoryValidator.isCategoryIdValid(categoryId);
 		  cate =  categoryDAO.getCategoryById(categoryId);
 		 }catch(PersistanceException e) {
 			 throw new ServiceException(e.getMessage());

@@ -28,7 +28,7 @@ public class TestSize {
 		Exception exception = assertThrows(ValidationException.class, () ->{
 			sizeservice.getSizeById(0);
 		});
-		String expectedMessage = "Invalid sizeId";
+		String expectedMessage = "Size ID must be non-negative";
 		String actualMessage = exception.getMessage();
 		System.out.println(actualMessage);
 
@@ -43,7 +43,7 @@ public class TestSize {
 		Exception exception = assertThrows(ValidationException.class, () ->{
 			sizeservice.getSizeById(-1);
 		});
-		String expectedMessage = "Invalid sizeId";
+		String expectedMessage = "Size ID must be non-negative";
 		String actualMessage = exception.getMessage();
 		System.out.println(actualMessage);
 		assertTrue(expectedMessage.equals(actualMessage));

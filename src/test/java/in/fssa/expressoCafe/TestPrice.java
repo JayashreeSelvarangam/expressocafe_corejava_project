@@ -32,7 +32,7 @@ public class TestPrice {
 		PriceService priceService = new PriceService();
 
 		ValidationException exception = assertThrows(ValidationException.class, () -> priceService.updatePrice(-1, 3, 9.99));
-		assertEquals("Invalid ProductId", exception.getMessage());
+		assertEquals("Invalid ProductId should be greater than 0.", exception.getMessage());
 	}
 
 	@Test
@@ -41,7 +41,7 @@ public class TestPrice {
 
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> priceService.updatePrice(11, -1, 9.99));
-		assertEquals("Invalid SizeId", exception.getMessage());
+		assertEquals("Invalid SizeId should be greater than 0.", exception.getMessage());
 	}
 
 	@Test
@@ -50,16 +50,16 @@ public class TestPrice {
 
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> priceService.updatePrice(999, 2, -9.99));
-		assertEquals("Invalid Price", exception.getMessage());
+		assertEquals("Invalid Price should be greater than 0.", exception.getMessage());
 	}
 
 	@Test
 	void testUpdatePriceNonExistentProductId() {
 		PriceService priceService = new PriceService();
 
-		ServiceException exception = assertThrows(ServiceException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> priceService.updatePrice(999, 1, 9.99));
-		assertEquals("product does not exist", exception.getMessage());
+		assertEquals("Invalid ProductId: no product exists in this product id", exception.getMessage());
 	}
 
 	@Test
@@ -67,9 +67,9 @@ public class TestPrice {
 
 		PriceService priceService = new PriceService();
 
-		ServiceException exception = assertThrows(ServiceException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> priceService.updatePrice(11, 999, 9.99));
-		assertEquals("size id does not exist", exception.getMessage());
+		assertEquals("Invalid SizeId: no size exists in this product id", exception.getMessage());
 	}
 
 //    @Test
@@ -104,7 +104,7 @@ public class TestPrice {
 
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> priceService.getHistoryOfProuctWithUniqueSize(-1, 1));
-		assertEquals("Invalid ProductId", exception.getMessage());
+		assertEquals("Invalid ProductId should be greater than 0.", exception.getMessage());
 	}
 
 	@Test
@@ -113,16 +113,16 @@ public class TestPrice {
 
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> priceService.getHistoryOfProuctWithUniqueSize(41, -1));
-		assertEquals("Invalid SizeId", exception.getMessage());
+		assertEquals("Invalid SizeId should be greater than 0.", exception.getMessage());
 	}
 
 	@Test
 	void testGetPriceSizeNonExistentProductId() {
 		PriceService priceService = new PriceService();
 
-		ServiceException exception = assertThrows(ServiceException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> priceService.getHistoryOfProuctWithUniqueSize(999, 1));
-		assertEquals("product does not exist", exception.getMessage());
+		assertEquals("Invalid ProductId: no product exists in this product id", exception.getMessage());
 	}
 
 	@Test
@@ -130,9 +130,9 @@ public class TestPrice {
 
 		PriceService priceService = new PriceService();
 
-		ServiceException exception = assertThrows(ServiceException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> priceService.getHistoryOfProuctWithUniqueSize(11, 999));
-		assertEquals("size id does not exist", exception.getMessage());
+		assertEquals("Invalid SizeId: no size exists in this product id", exception.getMessage());
 	}
 
 //    // get all prices for product id
@@ -149,14 +149,14 @@ public class TestPrice {
 	void testGetPriceInvalidProductId() {
 		PriceService priceService = new PriceService();
 		ValidationException exception = assertThrows(ValidationException.class, () -> priceService.getHistoryOfProuct(-1));
-		assertEquals("Invalid ProductId", exception.getMessage());
+		assertEquals("Invalid ProductId should be greater than 0.", exception.getMessage());
 	}
 
 	@Test
 	void testGetPriceNonExistentProductId() {
 		PriceService priceService = new PriceService();
 
-		ServiceException exception = assertThrows(ServiceException.class, () -> priceService.getHistoryOfProuct(999));
-		assertEquals("product does not exist", exception.getMessage());
+		ValidationException exception = assertThrows(ValidationException.class, () -> priceService.getHistoryOfProuct(999));
+		assertEquals("Invalid ProductId: no product exists in this product id", exception.getMessage());
 	}
 }

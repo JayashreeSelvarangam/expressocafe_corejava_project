@@ -21,7 +21,7 @@ public enum SizeEnum {
                 return sizeEnum;
             }
         }
-        return null;  // Handle the case where size ID doesn't match any SizeEnum
+        return null; 
     }
 
 }

@@ -54,10 +54,10 @@ public class TestCategory {
 	public void testFindMenuByIdWithInvalidCategoryId() {
 		CategoryService categoryservice = new CategoryService();
 		
-		Exception exception = assertThrows(ServiceException.class, () ->{
+		ValidationException exception = assertThrows(ValidationException.class, () ->{
 			categoryservice.getCategoryById(7);
 		});
-		String expectedMessage = "category does not exists";
+		String expectedMessage = "Category Id doesnot exists in the database";
 		String actualMessage = exception.getMessage();
 
 		assertTrue(expectedMessage.equals(actualMessage));
@@ -67,10 +67,10 @@ public class TestCategory {
 	public void testisCategoryIdValid() {
 		CategoryService categoryservice = new CategoryService();
 		
-		Exception exception = assertThrows(ValidationException.class, () ->{
+		ValidationException exception = assertThrows(ValidationException.class, () ->{
 			categoryservice.isCategoryIdValid(6);
 		});
-		String expectedMessage = "Invalid CategoryId";
+		String expectedMessage = "Category Id doesnot exists in the database";
 		String actualMessage = exception.getMessage();
 		
 		assertTrue(expectedMessage.equals(actualMessage));
@@ -80,7 +80,7 @@ public class TestCategory {
 	public void testisCategoryIdValidforcateid() {
 		CategoryService categoryservice = new CategoryService();
 		
-		Exception exception = assertThrows(ValidationException.class, () ->{
+		ValidationException exception = assertThrows(ValidationException.class, () ->{
 			categoryservice.isCategoryIdValid(0);
 		});
 		String expectedMessage = "Category ID must be non-negative";

@@ -5,6 +5,7 @@ import in.fssa.expressoCafe.dao.SizeDAO;
 import in.fssa.expressoCafe.exception.PersistanceException;
 import in.fssa.expressoCafe.exception.ValidationException;
 import in.fssa.expressoCafe.model.Size;
+import in.fssa.expressoCafe.util.IntUtil;
 
 public class SizeValidator {
 	/**
@@ -29,6 +30,9 @@ public class SizeValidator {
             throw new ValidationException("Size ID must be non-negative");
         }
     }
+    public static void rejectIfInvalidInt (int productId, String message) throws ValidationException {
+		IntUtil.rejectIfInvalidInt(productId, message);
+	}
 
     public static void validateSizeName(String sizeName) throws ValidationException {
         if (sizeName == null || sizeName.isEmpty()) {
@@ -50,7 +54,7 @@ public class SizeValidator {
 			sizeDAO.doesSizeIdExists(sizeId);
 			
 		} catch (PersistanceException e) {
-			throw new ValidationException("Invalid SizeId");
+			throw new ValidationException("Invalid SizeId: no size exists in this product id");
 		}
 	
 	}

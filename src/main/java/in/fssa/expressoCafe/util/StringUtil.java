@@ -10,37 +10,29 @@ public class StringUtil {
 
 	public static void rejectIfInvalidString(String input, String inputName) throws ValidationException {
 		if (input == null || "".equals(input.trim())) {
-			
 			throw new ValidationException(inputName.concat(" cannot be null or empty"));
 		}
 		
 	    String regexPattern = "^[a-zA-Z0-9_]*$"; // Add your desired regex pattern here
-
 	    Pattern pattern = Pattern.compile(regexPattern);
 	    Matcher matcher = pattern.matcher(input);
-
 	    if (!matcher.matches()) {
 	        throw new ValidationException(inputName.concat(" contains invalid characters"));
 	    }
-
+	    
 	}
+	
 	public static void rejectIfInvalidStringWithoutPattern(String input, String inputName) throws ValidationException {
 		if (input == null || "".equals(input.trim())) {
 			
 			throw new ValidationException(inputName.concat(" cannot be null or empty"));
 		}
-		
-	    
 	}
 
 	public static void rejectIfInvalidEmail(String email) throws ValidationException {
-
 		String regexPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$";
-
 		Pattern pattern = Pattern.compile(regexPattern);
-		
 		Matcher matcher = pattern.matcher(email);
-
 		if (!matcher.matches()) {
 			throw new ValidationException("Invalid email");
 		}

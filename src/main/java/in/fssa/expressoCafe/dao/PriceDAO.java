@@ -25,7 +25,6 @@ public class PriceDAO {
  * @throws PersistanceException
  */
 	public void createProductPrices(Price price) throws PersistanceException {
-
 		Connection con = null;
 		PreparedStatement ps = null;
 
@@ -35,12 +34,19 @@ public class PriceDAO {
 
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
+			
 			ps.setDouble(1, price.getPrice());
 			ps.setInt(2, price.getSize().getSizeId()); // Assuming SizeEnum values match database values
 			ps.setInt(3, price.getProduct().getProduct_id());
 			System.out.println(price.getProduct().getCreatedDate());
 			ps.setTimestamp(4, price.getProduct().getCreatedDate());
-			ps.executeUpdate();
+			int rows = ps.executeUpdate();
+			if(rows>0) {
+			System.out.println("Product price created sucessfully");
+			}
+			else {
+				throw new Exception("Price creation is unsuccessfull");
+			}
 
 			System.out.print("Product is successfully created with its prices");
 		} catch (SQLException e) {
@@ -52,15 +58,14 @@ public class PriceDAO {
 			ConnectionUtil.close(con, ps);
 		}
 	}
-
 	/**
 	 * 
 	 * @param productId
 	 * @return
 	 * @throws PersistanceException
 	 */
-
 	/// method for getAllproducts for categoryId;
+	
 	 public List<Price> getPricesForProduct(int productId) throws PersistanceException {
 	        Connection con = null;
 	        PreparedStatement ps = null;
@@ -98,11 +103,6 @@ public class PriceDAO {
 	        }
 	        return prices;
 	    }
-
-
-
-	
-
 // another method for get all prices 
 	
 //	public List<Product> getAllprices(List<Product> product1) throws PersistanceException {
@@ -150,12 +150,20 @@ public class PriceDAO {
 		PreparedStatement ps = null;
 		try {
 			String query = "UPDATE price SET end_date = ? WHERE price_id = ? AND end_date IS NULL";
+			
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
+			
 			ps.setTimestamp(1, dateTime);
 			ps.setInt(2, priceId);
-			// ps.setTimestamp(3, dateTime);
-			ps.executeUpdate();
+			int rows = ps.executeUpdate();
+			if(rows>0) {
+			System.out.println("Product price created sucessfully");
+			}
+			else {
+				throw new Exception("Price updation is unsuccessfull");
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
@@ -220,10 +228,12 @@ public class PriceDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		
 		boolean value = true;
 		int priceId = 0;
+		
 		try {
-			String query = "Select * From price Where product_id = ? And size_id = ? And  end_date IS NULL";
+			String query = "SELECT * FROM price WHERE product_id = ? AND size_id = ? AND  end_date IS NULL";
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, productId);
@@ -267,8 +277,13 @@ public class PriceDAO {
 			ps.setInt(2, size_id);
 			ps.setDouble(3, price);
 			ps.setTimestamp(4, dateTime);
-			ps.executeUpdate();
+			int rows = ps.executeUpdate();
+			if(rows>0) {
 			System.out.println("Product price created sucessfully");
+			}
+			else {
+				throw new Exception("Price updation is unsuccessfull");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
@@ -279,7 +294,6 @@ public class PriceDAO {
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
-
 	}
 /**
  * 
@@ -309,7 +323,6 @@ public class PriceDAO {
 				Price priceEntry = new Price();
 				Product product = new Product();
 				
-				
 				priceEntry.setPrice(price);
 				priceEntry.setPriceId(rs.getInt("price_id"));
 				product.setProduct_id(rs.getInt("product_id"));
@@ -318,6 +331,7 @@ public class PriceDAO {
 				priceEntry.setStartDate(rs.getTimestamp("start_date"));
 				priceEntry.setEndDate(rs.getTimestamp("end_date"));
 				priceHistory.add(priceEntry);
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -354,9 +368,8 @@ public class PriceDAO {
 				int sizeId1 = rs.getInt("size_id");
 				int price = rs.getInt("price");
 				Timestamp startDate = rs.getTimestamp("start_date");
+				
 				Product product = new Product();
-				
-				
 				Price priceEntry = new Price();
 				priceEntry.setPrice(price);
 				priceEntry.setPriceId(rs.getInt("price_id"));
@@ -366,6 +379,7 @@ public class PriceDAO {
 				priceEntry.setStartDate(rs.getTimestamp("start_date"));
 				priceEntry.setEndDate(rs.getTimestamp("end_date"));
 				priceHistory.add(priceEntry);
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -378,38 +392,5 @@ public class PriceDAO {
 		}
 
 		return priceHistory;
-
 	}
-
-//	public Product getpriceswithProductId(Product product1) throws PersistanceException {
-//		Connection conn = null;
-//		PreparedStatement ps = null;
-//		ResultSet rs = null;
-//		try {
-//			conn = ConnectionUtil.getConnnetion();
-//			int productId = product1.getProduct_id();
-//			String query = "SELECT size_id, price FROM price WHERE product_id = ?";
-//			ps = conn.prepareStatement(query);
-//			ps.setInt(1, productId);
-//			rs = ps.executeQuery();
-//			Map<SizeEnum, Double> priceMap = new HashMap<>();
-//			while (rs.next()) {
-//				int sizeId = rs.getInt("size_id");
-//				double price = rs.getDouble("price");
-//				SizeEnum sizeEnum = SizeEnum.getSizeEnumById(sizeId);
-//				priceMap.put(sizeEnum, price);
-//			}
-//			product1.setPriceMap(priceMap);
-//		} catch (SQLException e) {
-//			System.out.println(e.getMessage());
-//			throw new PersistanceException("Cannot get Price for this product id");
-//		} catch (Exception e) {
-//			System.out.println(e.getMessage());
-//			throw new PersistanceException("Cannot get Price for this product id");
-//		} finally {
-//			ConnectionUtil.close(conn, ps, rs);
-//		}
-//		return product1;
-//	}
-
 }
