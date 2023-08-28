@@ -1,7 +1,7 @@
 package in.fssa.expressocafe.validator;
 
-import in.fssa.expressocafe.dao.ProductDAO;
-import in.fssa.expressocafe.dao.SizeDAO;
+import in.fssa.expressocafe.DAO.ProductDAO;
+import in.fssa.expressocafe.DAO.SizeDAO;
 import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.exception.ValidationException;
 import in.fssa.expressocafe.model.Size;
@@ -49,8 +49,6 @@ public class SizeValidator {
 
 		try {
 			SizeDAO sizeDAO = new SizeDAO();
-			// do it later
-			// IntUtil.rejectIfInvalidInt(Productid, "ProductId");
 			sizeDAO.doesSizeIdExists(sizeId);
 			
 		} catch (PersistanceException e) {

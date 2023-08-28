@@ -81,11 +81,10 @@ public class TestUpdateProduct {
 		Product product = new Product();
 		product.setName("cappp122u");
 		product.setDescription("feel refreshed");
-		
 		product.setProduct_id(11);
 		
 		Category category = new Category();
-		category.setCategoryId(90); // Assuming category ID 90 does not exist
+		category.setCategoryId(90); 
 		product.setCategory(category);
 		
 		ProductService productService = new ProductService();

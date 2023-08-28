@@ -1,4 +1,4 @@
-package in.fssa.expressocafe.dao;
+package in.fssa.expressocafe.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +17,7 @@ public class SizeDAO {
 	 * @return
 	 */
 	public List<Size> getAllSizes() {
-		String query = "SELECT * FROM sizes";
+		String query = "SELECT size_id,size_name FROM sizes";
 		Connection connection = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -58,7 +58,7 @@ public class SizeDAO {
 
 		try {
 			connection = ConnectionUtil.getConnnetion();
-			String query = "SELECT * FROM size WHERE size_id = ?";
+			String query = "SELECT size_id,size_name FROM sizes WHERE size_id = ?";
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, sizeId);
 			rs = ps.executeQuery();
@@ -92,7 +92,7 @@ public class SizeDAO {
 	        boolean value = true;
 	        try {
 	            connection = ConnectionUtil.getConnnetion();
-	            String query = "SELECT * FROM size WHERE size_id = ?";
+	            String query = "SELECT 1 FROM sizes WHERE size_id = ?";
 	            ps = connection.prepareStatement(query);
 	            ps.setInt(1, sizeId);
 	            rs = ps.executeQuery();

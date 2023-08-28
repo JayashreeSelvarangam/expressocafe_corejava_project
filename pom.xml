@@ -45,6 +45,11 @@
 
 
 
+		<dependency>
+			<groupId>in.fssa</groupId>
+			<artifactId>expressocafe-web</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 

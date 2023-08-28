@@ -1,4 +1,4 @@
-package in.fssa.expressocafe.dao;
+package in.fssa.expressocafe.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,7 +22,7 @@ public class CategoryDAO {
  * @throws PersistanceException 
  */
 	public Category getCategoryById(int categoryId) throws ValidationException, PersistanceException {
-		 String query = "SELECT cate_id,name  FROM category WHERE cate_id = ?";
+		 String query = "SELECT cate_id,name  FROM categories WHERE cate_id = ?";
 	        Connection connection = null;
 	        PreparedStatement ps = null;
 	        ResultSet rs = null;
@@ -61,6 +61,7 @@ public class CategoryDAO {
 	 * @throws PersistanceException
 	 */
 	public boolean doesCategoryExist(int cateId) throws PersistanceException {
+	
 		Connection connection = null;
 	    PreparedStatement ps = null;
 	    ResultSet rs = null;
@@ -68,26 +69,24 @@ public class CategoryDAO {
 	    
 	    try {
 	        connection = ConnectionUtil.getConnnetion();
-	        String query = "SELECT EXISTS(SELECT 1 FROM category WHERE cate_id = ?)";
+	        String query = "SELECT 1 FROM categories WHERE cate_id = ?";
 	        ps = connection.prepareStatement(query);
 	        ps.setInt(1, cateId);
 	        rs = ps.executeQuery();
-	        if(rs.next()) {
-	        	  value = rs.getBoolean(1);
+	        	        
+	        if(rs.next()) { 
+	        	  value = true;
+	        }else {
+	        	throw new PersistanceException("category does not exists");
 	        }
 	        
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        System.out.print(e.getMessage());
-	        throw new PersistanceException("category does not exists");
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        System.out.print(e.getMessage());
-	        throw new PersistanceException("category does not exists"); 	
-	    }
-	    finally {
-	     ConnectionUtil.close(connection, ps, rs);
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.print(e.getMessage());
+			throw new PersistanceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(connection, ps, rs);
+		}
 	    return value;
 	}
 /**
@@ -97,7 +96,7 @@ public class CategoryDAO {
  */
 	
 	public List<Category> getAllCategories() throws PersistanceException {
-        String query = "SELECT cate_id,name FROM category";
+        String query = "SELECT cate_id,name FROM categories";
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;

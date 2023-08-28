@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import in.fssa.expressocafe.dao.CategoryDAO;
+import in.fssa.expressocafe.DAO.CategoryDAO;
 import in.fssa.expressocafe.exception.ServiceException;
 import in.fssa.expressocafe.exception.ValidationException;
 import in.fssa.expressocafe.service.CategoryService;

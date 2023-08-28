@@ -1,4 +1,4 @@
-package in.fssa.expressocafe.dao;
+package in.fssa.expressocafe.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,16 +30,15 @@ public class PriceDAO {
 
 		try {
 			
-			String query = "INSERT INTO price (price, size_id, product_id,start_date) VALUES (?, ?, ?,?)";
+			String query = "INSERT INTO prices (price, size_id, product_id,start_date) VALUES (?, ?, ?,?)";
 
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
 			
 			ps.setDouble(1, price.getPrice());
-			ps.setInt(2, price.getSize().getSizeId()); // Assuming SizeEnum values match database values
-			ps.setInt(3, price.getProduct().getProduct_id());
-			System.out.println(price.getProduct().getCreatedDate());
-			ps.setTimestamp(4, price.getProduct().getCreatedDate());
+			ps.setInt(2, price.getSize().getSizeId()); 
+			ps.setInt(3, price.getProductId());
+			ps.setTimestamp(4, price.getStartDate());
 			int rows = ps.executeUpdate();
 			if(rows>0) {
 			System.out.println("Product price created sucessfully");
@@ -74,7 +73,7 @@ public class PriceDAO {
 	        List<Price> prices = new ArrayList<>();
 
 	        try {
-	            String query =  "SELECT price_id,size_id, price FROM price WHERE product_id = ? AND end_date IS NULL";
+	            String query =  "SELECT price_id,size_id, price FROM prices WHERE product_id = ? AND end_date IS NULL";
 
 	            con = ConnectionUtil.getConnnetion();
 	            ps = con.prepareStatement(query);
@@ -149,7 +148,7 @@ public class PriceDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
-			String query = "UPDATE price SET end_date = ? WHERE price_id = ? AND end_date IS NULL";
+			String query = "UPDATE prices SET end_date = ? WHERE price_id = ? AND end_date IS NULL";
 			
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
@@ -190,7 +189,7 @@ public class PriceDAO {
 		int price = -1;
 
 		try {
-			String query = "SELECT * FROM price WHERE product_id=? AND size_id =? AND end_date IS NULL";
+			String query = "SELECT price FROM prices WHERE product_id=? AND size_id=? AND end_date IS NULL";
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, productId);
@@ -233,7 +232,7 @@ public class PriceDAO {
 		int priceId = 0;
 		
 		try {
-			String query = "SELECT size_id,price,start_date,price_id,product_id,end_date FROM price WHERE product_id = ? AND size_id = ? AND  end_date IS NULL";
+			String query = "SELECT size_id,price,start_date,price_id,product_id,end_date FROM prices WHERE product_id = ? AND size_id = ? AND  end_date IS NULL";
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, productId);
@@ -270,7 +269,7 @@ public class PriceDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
-			String query = "INSERT INTO price(product_id,size_id,price,start_date) VALUES (?,?,?,?)";
+			String query = "INSERT INTO prices(product_id,size_id,price,start_date) VALUES (?,?,?,?)";
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, productId);
@@ -309,7 +308,7 @@ public class PriceDAO {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT size_id,price,start_date,price_id,product_id,end_date FROM price WHERE product_id = ? AND size_id = ? ORDER BY start_date ASC";
+			String query = "SELECT size_id,price,start_date,price_id,product_id,end_date FROM prices WHERE product_id = ? AND size_id = ? ORDER BY start_date ASC";
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, productId);
@@ -326,13 +325,13 @@ public class PriceDAO {
 				priceEntry.setPrice(price);
 				priceEntry.setPriceId(rs.getInt("price_id"));
 				product.setProduct_id(rs.getInt("product_id"));
-				priceEntry.setProduct(product);
+				priceEntry.setProductId(rs.getInt("product_id"));
 				priceEntry.setSize(SizeEnum.values()[rs.getInt("size_id") - 1]);
 				priceEntry.setStartDate(rs.getTimestamp("start_date"));
 				priceEntry.setEndDate(rs.getTimestamp("end_date"));
 				priceHistory.add(priceEntry);
-				
-			}
+				}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistanceException("Cannot get price history of all the product");
@@ -358,7 +357,7 @@ public class PriceDAO {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT size_id,price,start_date,price_id,product_id,end_date FROM price WHERE product_id = ? ORDER BY start_date ASC";
+			String query = "SELECT size_id,price,start_date,price_id,product_id,end_date FROM prices WHERE product_id = ? ORDER BY start_date ASC";
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, productId);
@@ -373,8 +372,7 @@ public class PriceDAO {
 				Price priceEntry = new Price();
 				priceEntry.setPrice(price);
 				priceEntry.setPriceId(rs.getInt("price_id"));
-				product.setProduct_id(rs.getInt("product_id"));
-				priceEntry.setProduct(product);
+				priceEntry.setProductId(rs.getInt("product_id"));
 				priceEntry.setSize(SizeEnum.values()[rs.getInt("size_id") - 1]);
 				priceEntry.setStartDate(rs.getTimestamp("start_date"));
 				priceEntry.setEndDate(rs.getTimestamp("end_date"));

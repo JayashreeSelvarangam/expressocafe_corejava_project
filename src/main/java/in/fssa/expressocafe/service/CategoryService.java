@@ -2,7 +2,7 @@ package in.fssa.expressocafe.service;
 
 import java.util.List;
 
-import in.fssa.expressocafe.dao.CategoryDAO;
+import in.fssa.expressocafe.DAO.CategoryDAO;
 import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.exception.ServiceException;
 import in.fssa.expressocafe.exception.ValidationException;
@@ -21,7 +21,6 @@ public class CategoryService  {
 	public List<Category> getAllCategories() throws  ServiceException {
 		List <Category> cate = null ;
 		try {
-	    		
 	    	CategoryDAO categoryDAO = new CategoryDAO();
 	    	cate = categoryDAO.getAllCategories();
 	    	}
@@ -42,8 +41,7 @@ public class CategoryService  {
 		  CategoryEntity cate = null ;
 		  try {
 		  CategoryDAO categoryDAO = new CategoryDAO();
-		  // creating category Validator
-		  
+		  //  category Validator
 		  CategoryValidator.validateCategoryId(categoryId); 
 		  CategoryValidator.isCategoryIdValid(categoryId);
 		  cate =  categoryDAO.getCategoryById(categoryId);
@@ -62,7 +60,7 @@ public class CategoryService  {
 	// this method check whether the category id exists but it does not return anything  
 	  public void isCategoryIdValid(int category_id) throws ValidationException {
 		  CategoryValidator.validateCategoryId(category_id);
-			CategoryValidator.isCategoryIdValid(category_id);
+		  CategoryValidator.isCategoryIdValid(category_id);
 		}
 
 	  

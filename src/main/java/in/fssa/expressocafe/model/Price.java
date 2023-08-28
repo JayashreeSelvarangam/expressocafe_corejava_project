@@ -11,7 +11,7 @@ public class Price {
    
 	private double price;
     private SizeEnum size;
-    private Product product;
+    private int product_id;
 	
 	
 	public Timestamp getStartDate() {
@@ -44,10 +44,10 @@ public class Price {
 	public void setSize(SizeEnum size) {
 		this.size = size;
 	}
-	public Product getProduct() {
-		return product;
+	public int getProductId() {
+		return product_id;
 	}
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setProductId(int product_id) {
+		this.product_id = product_id;
 	}
 }

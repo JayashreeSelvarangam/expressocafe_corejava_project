@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import in.fssa.expressocafe.dao.PriceDAO;
-import in.fssa.expressocafe.dao.UserDAO;
+import in.fssa.expressocafe.DAO.PriceDAO;
+import in.fssa.expressocafe.DAO.UserDAO;
 import in.fssa.expressocafe.model.Category;
 import in.fssa.expressocafe.model.Price;
 import in.fssa.expressocafe.model.Product;

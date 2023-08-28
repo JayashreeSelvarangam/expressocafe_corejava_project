@@ -1,7 +1,7 @@
 package in.fssa.expressocafe.validator;
 
   
-import in.fssa.expressocafe.dao.CategoryDAO;
+import in.fssa.expressocafe.DAO.CategoryDAO;
 import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.exception.ValidationException;
 import in.fssa.expressocafe.model.CategoryEntity;
@@ -51,9 +51,10 @@ public class CategoryValidator {
      */
     public static void isCategoryIdValid(int category_id) throws ValidationException {
 		try {
-			CategoryDAO categorydao = new CategoryDAO();
+			CategoryDAO categoryDAO = new CategoryDAO();
 			IntUtil.rejectIfInvalidInt(category_id, "Category Id");
-			categorydao.doesCategoryExist(category_id);
+			// DAO
+			categoryDAO.doesCategoryExist(category_id);
 		} catch(PersistanceException e) {
 			throw new ValidationException("Category Id doesnot exists in the database");
 		}

@@ -6,7 +6,7 @@ public enum SizeEnum {
     SMALL(3);
 
     private final int sizeId;
-	private SizeEnum size;
+	
 
     SizeEnum(int sizeId) {
         this.sizeId = sizeId;
@@ -25,11 +25,6 @@ public enum SizeEnum {
         return null; 
     }
     
-	public SizeEnum getSize() {
-		return getSize();
-	}
-	public void setSize(SizeEnum size) {
-		this.size = size;
-	}
+	
 
 }

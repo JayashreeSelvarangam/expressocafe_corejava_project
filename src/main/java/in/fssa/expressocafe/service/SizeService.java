@@ -2,7 +2,7 @@ package in.fssa.expressocafe.service;
 
 import java.util.List;
 
-import in.fssa.expressocafe.dao.SizeDAO;
+import in.fssa.expressocafe.DAO.SizeDAO;
 import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.exception.ServiceException;
 import in.fssa.expressocafe.exception.ValidationException;

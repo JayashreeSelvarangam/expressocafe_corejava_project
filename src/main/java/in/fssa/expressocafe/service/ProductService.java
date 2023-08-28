@@ -1,19 +1,20 @@
 package in.fssa.expressocafe.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.fssa.expressocafe.dao.CategoryDAO;
-import in.fssa.expressocafe.dao.PriceDAO;
-import in.fssa.expressocafe.dao.ProductDAO;
+import in.fssa.expressocafe.DAO.CategoryDAO;
+import in.fssa.expressocafe.DAO.PriceDAO;
+import in.fssa.expressocafe.DAO.ProductDAO;
 import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.exception.ServiceException;
 import in.fssa.expressocafe.exception.ValidationException;
 import in.fssa.expressocafe.model.Price;
 import in.fssa.expressocafe.model.Product;
-import in.fssa.expressocafe.model.SizeEnum;
-import in.fssa.expressocafe.util.IntUtil;
-import in.fssa.expressocafe.util.StringUtil;
+//import in.fssa.expressocafe.model.SizeEnum;
+//import in.fssa.expressocafe.util.IntUtil;
+//import in.fssa.expressocafe.util.StringUtil;
 import in.fssa.expressocafe.validator.CategoryValidator;
 import in.fssa.expressocafe.validator.PriceValidator;
 import in.fssa.expressocafe.validator.ProductValidator;
@@ -48,16 +49,22 @@ public class ProductService {
 			// check for the valid price
 			PriceValidator.validatePriceList(product.getPriceList());
 			
-			// create product details in product Table
-			Product prod = productDAO.createProduct(product);
+			// set Date
+			LocalDateTime date = LocalDateTime.now();
+			java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
+			product.setCreatedDate(dateTime);
 			
-			// set product id in the product object
-			product.setProduct_id(prod.getProduct_id());
+			// create product details in product Table
+			int prod_id = productDAO.createProduct(product);
+			
+			
 			
 			for (Price price1 : priceList) {
-				price1.setProduct(product);
+				price1.setProductId(prod_id);
+				price1.setStartDate(dateTime);
 				priceService.createPrice(price1);
 			}
+			
 		}catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
@@ -71,7 +78,7 @@ public class ProductService {
  */
 	public void updateProduct(Product product) throws ServiceException, ValidationException {
 		try {
-			// include modified at 
+			 
 			ProductDAO productDAO = new ProductDAO();
 			CategoryDAO cate = new CategoryDAO();
 			// form validation of productName and productDescription
@@ -81,15 +88,17 @@ public class ProductService {
 			ProductValidator.isProductIdValid(product.getProduct_id());
 			ProductValidator.validateProductNameAlreadyExists(product);
 		
+			// include modified at
+			LocalDateTime date = LocalDateTime.now();
+			java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
 			// category validation
 
 			CategoryValidator.validateCategory(product.getCategory());
 			CategoryValidator.isCategoryIdValid((product.getCategory().getCategoryId()));
-		
 			// should add modified at DAO
 			if (productDAO.doesProductExist(product.getProduct_id())) {
 				productDAO.updateProduct(product.getProduct_id(), product.getName(), product.getDescription(),
-						product.getCategory().getCategoryId());
+						product.getCategory().getCategoryId(),dateTime);
 			}
 		}catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
@@ -126,13 +135,13 @@ public class ProductService {
 		List<Product> products = null;
 		try {
 			
-			ProductDAO productDao = new ProductDAO();
-			PriceDAO priceDao = new PriceDAO();
+			ProductDAO productDAO = new ProductDAO();
+			PriceDAO priceDAO = new PriceDAO();
 			
-			products = productDao.getAllProducts();	
+			products = productDAO.getAllProducts();	
 			
 			for (Product product : products) {
-				List<Price> prices = priceDao.getPricesForProduct(product.getProduct_id());
+				List<Price> prices = priceDAO.getPricesForProduct(product.getProduct_id());
 				product.setPriceList(prices);
 			}
 		} catch (PersistanceException e) {
@@ -151,16 +160,17 @@ public class ProductService {
 		
 		List<Product> products = null;
 		try {
-			ProductDAO productDao = new ProductDAO();
-			PriceDAO priceDao = new PriceDAO();
+			ProductDAO productDAO = new ProductDAO();
+			PriceDAO priceDAO = new PriceDAO();
+			
 			// validation for category id
 			CategoryValidator.validateCategoryId(categoryId);
 			CategoryValidator.isCategoryIdValid(categoryId);
 			
-			products = productDao.getAllproductswithCategoryId(categoryId);
+			products = productDAO.getAllproductswithCategoryId(categoryId);
 			
 			for (Product product : products) {
-				List<Price> prices = priceDao.getPricesForProduct(product.getProduct_id());
+				List<Price> prices = priceDAO.getPricesForProduct(product.getProduct_id());
 				product.setPriceList(prices);
 			}
 		}
@@ -179,16 +189,16 @@ public class ProductService {
 	public Product findProductWithProductId(int productId) throws ServiceException, ValidationException {
 		Product product = null;
 		try {
-			ProductDAO productDao = new ProductDAO();
-			PriceDAO priceDao = new PriceDAO();
+			ProductDAO productDAO = new ProductDAO();
+			PriceDAO priceDAO = new PriceDAO();
 			// validation for product id
 			ProductValidator.rejectIfInvalidInt(productId,"ProductId");
 			ProductValidator.isProductIdValid(productId);
 					
-			product = productDao.findProductWithProductId(productId);
+			product = productDAO.findProductWithProductId(productId);
 			
 			if(product != null) {
-				List<Price> prices = priceDao.getPricesForProduct(product.getProduct_id());
+				List<Price> prices = priceDAO.getPricesForProduct(product.getProduct_id());
 				product.setPriceList(prices);
 			}
 		}
@@ -205,8 +215,8 @@ public class ProductService {
  */
 	public List<String> getAllProductName() throws ServiceException {
 		try {
-			ProductDAO productDao = new ProductDAO();
-			return productDao.getAllProductName();
+			ProductDAO productDAO = new ProductDAO();
+			return productDAO.getAllProductName();
 		} catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}

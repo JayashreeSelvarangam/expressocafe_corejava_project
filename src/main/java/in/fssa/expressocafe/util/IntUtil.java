@@ -1,3 +1,4 @@
+
 package in.fssa.expressocafe.util;
 
 import java.util.List;
@@ -27,11 +28,9 @@ public class IntUtil {
  * @throws ValidationException
  */
 	public static void rejectIfInvalidInt(int input, String inputName) throws ValidationException {
-		System.out.print(false);
 		if (input <= 0) {
 			throw new ValidationException("Invalid ".concat(inputName)+" should be greater than 0.");
 		}
-		System.out.print(false);
 	}
 /**
  * 

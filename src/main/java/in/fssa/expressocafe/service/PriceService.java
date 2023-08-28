@@ -8,9 +8,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import in.fssa.expressocafe.dao.PriceDAO;
-import in.fssa.expressocafe.dao.ProductDAO;
-import in.fssa.expressocafe.dao.SizeDAO;
+import in.fssa.expressocafe.DAO.PriceDAO;
+import in.fssa.expressocafe.DAO.ProductDAO;
+import in.fssa.expressocafe.DAO.SizeDAO;
 import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.exception.ServiceException;
 import in.fssa.expressocafe.exception.ValidationException;
@@ -74,6 +74,7 @@ public class PriceService {
 		try {
 			ProductDAO prod = new ProductDAO();
 			SizeDAO sizeDAO = new SizeDAO();
+			// check for the valid id
 			ProductValidator.rejectIfInvalidInt(productId,"ProductId");
 			SizeValidator.rejectIfInvalidInt(sizeId,"SizeId");
 			

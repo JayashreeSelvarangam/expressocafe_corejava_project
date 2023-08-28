@@ -349,7 +349,9 @@ public class TestCreateProduct {
 		product.setDescription("Feel refreshed");
 
 		Category category = new Category();
-		category.setCategoryId(90); // Assuming category ID 10 does not exist
+		category.setCategoryId(90); 
+		product.setCategory(category);
+		
 		List<Price> priceList = new ArrayList<>();
 		Price priceSmall = new Price();
 		priceSmall.setPrice(3.99);
@@ -368,11 +370,15 @@ public class TestCreateProduct {
 		priceList.add(priceLarge);
 		product.setPriceList(priceList);
 
-		product.setCategory(category);
+		
 		ProductService productService = new ProductService();
+		
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> productService.createProduct(product));
+		System.out.println( exception.getMessage());
+
 		assertEquals("Category Id doesnot exists in the database", exception.getMessage());
+		//System.out.println( exception.getMessage());
 	}
 
 	@Test

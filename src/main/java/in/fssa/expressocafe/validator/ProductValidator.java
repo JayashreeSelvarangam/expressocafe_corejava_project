@@ -2,8 +2,8 @@ package in.fssa.expressocafe.validator;
 
 import java.util.List;
 
-import in.fssa.expressocafe.dao.CategoryDAO;
-import in.fssa.expressocafe.dao.ProductDAO;
+import in.fssa.expressocafe.DAO.CategoryDAO;
+import in.fssa.expressocafe.DAO.ProductDAO;
 import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.exception.ServiceException;
 import in.fssa.expressocafe.exception.ValidationException;
@@ -66,10 +66,7 @@ public class ProductValidator {
 	public static void isProductIdValid(int productid) throws ValidationException {
 		try {
 			ProductDAO productdao = new ProductDAO();
-			// do it later
-			// IntUtil.rejectIfInvalidInt(Productid, "ProductId");
 			productdao.doesProductExist(productid);
-			System.out.print(true);
 		} catch (PersistanceException e) {
 			throw new ValidationException("Invalid ProductId: no product exists in this product id");
 		}
