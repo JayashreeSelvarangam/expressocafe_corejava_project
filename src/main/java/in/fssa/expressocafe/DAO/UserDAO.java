@@ -1,13 +1,4 @@
 package in.fssa.expressocafe.DAO;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import in.fssa.expressoCafe.exception.PersistanceException;
-import in.fssa.expressocafe.interfaces.UserDAOInterface;
-import in.fssa.expressocafe.model.UserEntity;
-import in.fssa.expressocafe.util.ConnectionUtil;
 public class UserDAO {
 	
 	
