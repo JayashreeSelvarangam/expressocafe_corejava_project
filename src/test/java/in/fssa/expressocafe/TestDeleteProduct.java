@@ -23,7 +23,7 @@ public class TestDeleteProduct {
 	@Test
 	void testDeleteProductWithValidId()  {
 		try {
-		int productId = 21;
+		int productId = 32;
 		ProductDAO pro = new ProductDAO();
 		pro.changeStatus(productId, 1);
 		ProductService productService = new ProductService();

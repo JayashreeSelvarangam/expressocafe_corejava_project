@@ -20,6 +20,13 @@ public class StringUtil {
 	        throw new ValidationException(inputName.concat(" contains invalid characters"));
 	    }
 	    
+	    
+	}
+	
+	public static void rejectIfInvalidString1(String input, String inputName) throws ValidationException {
+		if (input == null || "".equals(input.trim())) {
+			throw new ValidationException(inputName.concat(" cannot be null or empty"));
+		}
 	}
 	
 	public static void rejectIfInvalidStringWithoutPattern(String input, String inputName) throws ValidationException {
@@ -28,6 +35,7 @@ public class StringUtil {
 			throw new ValidationException(inputName.concat(" cannot be null or empty"));
 		}
 	}
+	
 
 	public static void rejectIfInvalidEmail(String email) throws ValidationException {
 		String regexPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$";

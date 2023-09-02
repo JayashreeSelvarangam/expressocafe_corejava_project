@@ -74,7 +74,7 @@ public class TestCreateProduct {
 
 		ProductService prodService = new ProductService();
 		Product product = new Product();
-		product.setName("JavaChip");
+		product.setName("coffeefrealkojiisjijfi");
 		product.setDescription("Feel refreshed");
 
 		Category category = new Category();
@@ -148,7 +148,7 @@ public class TestCreateProduct {
 
 		ProductService prodService = new ProductService();
 		Product product = new Product();
-		product.setName("Cappu");
+		product.setName(generateRandomProductName());
 		product.setDescription("");
 
 		Category category = new Category();
@@ -183,7 +183,7 @@ public class TestCreateProduct {
 
 		ProductService prodService = new ProductService();
 		Product product = new Product();
-		product.setName("Cappu");
+		product.setName(generateRandomProductName());
 		product.setDescription(null);
 
 		Category category = new Category();
@@ -217,7 +217,7 @@ public class TestCreateProduct {
 	@Test
 	void testCreateProductWithNullSize() {
 		Product product = new Product();
-		product.setName("capplavage");
+		product.setName(generateRandomProductName());
 		product.setDescription("Feel refreshed");
 
 		Price priceInvalidSize = new Price();
@@ -242,7 +242,7 @@ public class TestCreateProduct {
 	@Test
 	void testCreateProductWithInvalidPrice() {
 		Product product = new Product();
-		product.setName("mochacoffee");
+		product.setName(generateRandomProductName());
 		product.setDescription("Feel refreshed");
 
 		Price priceSmall = new Price();
@@ -293,7 +293,7 @@ public class TestCreateProduct {
 	@Test
 	void testCreateProductWithEmptyPriceList() {
 		Product product = new Product();
-		product.setName("capplavage");
+		product.setName(generateRandomProductName());
 		product.setDescription("Feel refreshed");
 		
 		Category category = new Category();
@@ -312,7 +312,7 @@ public class TestCreateProduct {
 	@Test
 	void testCreateProductWithInvalidCategoryId() {
 		Product product = new Product();
-		product.setName("capplavage");
+		product.setName(generateRandomProductName());
 		product.setDescription("Feel refreshed");
 
 		Category category = new Category();
@@ -345,7 +345,7 @@ public class TestCreateProduct {
 	@Test
 	void testCreateProductWithNonExistingCategoryId() {
 		Product product = new Product();
-		product.setName("capplavage");
+		product.setName(generateRandomProductName());
 		product.setDescription("Feel refreshed");
 
 		Category category = new Category();
@@ -385,7 +385,7 @@ public class TestCreateProduct {
 	void testCreateProductWithCategoryIsNull() {
 		
 		Product product = new Product();
-		product.setName("capplavage");
+		product.setName(generateRandomProductName());
 		product.setDescription("Feel refreshed");
 		
 		Category category = null; // Assuming category ID 10 does not exist

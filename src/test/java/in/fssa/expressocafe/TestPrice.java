@@ -25,7 +25,7 @@ public class TestPrice {
 	        PriceService priceService = new PriceService();
 
 	        // Act and Assert
-	        assertDoesNotThrow(() -> priceService.updatePrice(11, 3, randomNumber));
+	        assertDoesNotThrow(() -> priceService.updatePrice(36, 3, randomNumber));
 	    }
 	@Test
 	void testUpdatePriceInvalidProductId() {
@@ -68,7 +68,7 @@ public class TestPrice {
 		PriceService priceService = new PriceService();
 
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> priceService.updatePrice(11, 999, 9.99));
+				() -> priceService.updatePrice(36, 999, 9.99));
 		assertEquals("Invalid SizeId: no size exists in this product id", exception.getMessage());
 	}
 
@@ -95,7 +95,7 @@ public class TestPrice {
 		PriceService priceService = new PriceService();
 
 		// Act and Assert
-		assertDoesNotThrow(() -> priceService.getHistoryOfProuctWithUniqueSize(11, 1));
+		assertDoesNotThrow(() -> priceService.getHistoryOfProuctWithUniqueSize(36, 1));
 	}
 
 	@Test
@@ -131,7 +131,7 @@ public class TestPrice {
 		PriceService priceService = new PriceService();
 
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> priceService.getHistoryOfProuctWithUniqueSize(11, 999));
+				() -> priceService.getHistoryOfProuctWithUniqueSize(36, 999));
 		assertEquals("Invalid SizeId: no size exists in this product id", exception.getMessage());
 	}
 
@@ -141,7 +141,7 @@ public class TestPrice {
 	void testGetAllPriceValidData() {
 		PriceService priceService = new PriceService();
 
-		assertDoesNotThrow(() -> priceService.getHistoryOfProuct(11));
+		assertDoesNotThrow(() -> priceService.getHistoryOfProuct(36));
 
 	}
 

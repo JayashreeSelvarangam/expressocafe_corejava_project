@@ -29,7 +29,7 @@ public class TestUpdateProduct {
 		category.setCategoryId(1);
 		product.setCategory(category);
 		
-		product.setProduct_id(11);
+		product.setProduct_id(36);
 		ProductService productService = new ProductService();
 		assertDoesNotThrow(() -> productService.updateProduct(product));
 	}
@@ -81,7 +81,7 @@ public class TestUpdateProduct {
 		Product product = new Product();
 		product.setName("cappp122u");
 		product.setDescription("feel refreshed");
-		product.setProduct_id(11);
+		product.setProduct_id(36);
 		
 		Category category = new Category();
 		category.setCategoryId(90); 
@@ -101,7 +101,7 @@ public class TestUpdateProduct {
 		Category category = null;
 		product.setCategory(category);
 		
-		product.setProduct_id(11);
+		product.setProduct_id(36);
 		
 		ProductService productService = new ProductService();
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -170,7 +170,7 @@ public class TestUpdateProduct {
 		Category category = new Category();
 		category.setCategoryId(-1); // Invalid category ID
 		product.setCategory(category);
-		product.setProduct_id(11);
+		product.setProduct_id(36);
 		ProductService productService = new ProductService();
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> productService.updateProduct(product));
@@ -190,7 +190,7 @@ public class TestUpdateProduct {
 		category.setCategoryId(2);
 		product.setCategory(category);
 		
-		product.setProduct_id(11);
+		product.setProduct_id(36);
 		
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> prodService.updateProduct(product));

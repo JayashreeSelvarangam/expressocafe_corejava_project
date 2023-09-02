@@ -23,7 +23,7 @@ import in.fssa.expressocafe.service.ProductService;
 
 		void testGetProductWithExistingProductId() {
 
-			int productId = 11;
+			int productId = 36;
 			ProductService productService = new ProductService();
 			assertDoesNotThrow(() -> productService.findProductWithProductId(productId));
 		}
