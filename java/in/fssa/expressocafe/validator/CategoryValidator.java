@@ -15,7 +15,7 @@ public class CategoryValidator {
 	 */
     public static void validateCategory(CategoryEntity category) throws ValidationException{
     	validateCategory1(category);
-    	validateCategoryId(category.getCategoryId());
+    	validateCategoryId(category.getCategoryId()); 
       //validateCategoryName(category.getCategoryName());
     }
     /**

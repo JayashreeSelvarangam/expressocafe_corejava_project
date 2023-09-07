@@ -35,7 +35,7 @@ public class TestCategory {
 
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
-	
+	 
 
 	@Test
 	public void testFindMenuByIdWithNegativeCategoryId() {

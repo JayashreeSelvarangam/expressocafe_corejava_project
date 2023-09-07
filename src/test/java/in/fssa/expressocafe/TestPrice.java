@@ -21,19 +21,17 @@ public class TestPrice {
 
 	        Random rand = new Random();
 	        int randomNumber = rand.nextInt(max - min + 1) + min;
-
 	        PriceService priceService = new PriceService();
-
 	        // Act and Assert
 	        assertDoesNotThrow(() -> priceService.updatePrice(36, 3, randomNumber));
 	    }
-	@Test
+	@Test 
 	void testUpdatePriceInvalidProductId() {
 		PriceService priceService = new PriceService();
 
 		ValidationException exception = assertThrows(ValidationException.class, () -> priceService.updatePrice(-1, 3, 9.99));
 		assertEquals("Invalid ProductId should be greater than 0.", exception.getMessage());
-	}
+	} 
 
 	@Test
 	void testUpdatePriceInvalidSizeId() {
@@ -140,7 +138,7 @@ public class TestPrice {
 	@Test
 	void testGetAllPriceValidData() {
 		PriceService priceService = new PriceService();
-
+ 
 		assertDoesNotThrow(() -> priceService.getHistoryOfProuct(36));
 
 	}

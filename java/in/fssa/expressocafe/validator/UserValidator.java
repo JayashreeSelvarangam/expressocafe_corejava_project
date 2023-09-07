@@ -8,12 +8,12 @@ import in.fssa.expressocafe.model.UserEntity;
 import in.fssa.expressocafe.util.StringUtil;
 
 public class UserValidator {
-	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+	private static final String EMAIL_PATTERN = "^[a-zA-Z0-9]+([a-zA-Z0-9_+\\-\\. ]*[a-zA-Z0-9]+)?@[a-zA-Z0-9]+([a-zA-Z0-9\\-\\.]*[a-zA-Z0-9])?\\.[a-zA-Z]{2,}$"; 
 
 	private static final Pattern pattern1 = Pattern.compile(EMAIL_PATTERN);
 
-	private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+	private static final String PASSWORD_PATTERN = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}";
 
 	private static final Pattern pattern2 = Pattern.compile(PASSWORD_PATTERN);
 
@@ -34,7 +34,7 @@ public class UserValidator {
 	 * @throws ValidationException If the provided User object or its properties are
 	 *                             invalid.
 	 */
-	public static void validate(User user) throws ValidationException {
+	public static void validate(User user) throws ValidationException { 
 
 		if (user == null) {
 			throw new ValidationException("Invalid user input");
@@ -75,6 +75,5 @@ public class UserValidator {
 		}
 
 	}
-	}
-
+}
 

@@ -167,7 +167,7 @@ public class UserDAO implements UserInterface {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT id, first_name, last_name, email, phone_no FROM users WHERE is_active = 1";
+			String query = "SELECT id, first_name, last_name,is_active,password, email, phone_no FROM users WHERE is_active = 1";
 			conn = ConnectionUtil.getConnnetion();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -221,7 +221,7 @@ public class UserDAO implements UserInterface {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT id, first_name, last_name, email, phone_no FROM users WHERE is_active = 1 AND id = ?";
+			String query = "SELECT id, first_name,password, last_name,is_active, email, phone_no FROM users WHERE is_active = 1 AND id = ?";
 			conn = ConnectionUtil.getConnnetion();
 			ps = conn.prepareStatement(query);
 
@@ -323,7 +323,7 @@ public class UserDAO implements UserInterface {
 
 	        return false;
 
-	    } catch (SQLException e) {
+	    } catch (SQLException e) { 
 	        System.out.println(e.getMessage());
 	        throw new PersistanceException(e.getMessage());
 	    } finally {
@@ -331,6 +331,108 @@ public class UserDAO implements UserInterface {
 	    }
 	}
 
+	public User getUserByEmail(String email) throws PersistanceException {
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    User user = null;
+
+	    try {
+	        String query = "SELECT first_name, last_name, email, password, phone_no FROM users WHERE email = ? AND is_active=1";
+	        conn = ConnectionUtil.getConnnetion();
+	        ps = conn.prepareStatement(query);
+	        ps.setString(1, email);
+	        rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            user = new User();
+	            user.setFirstName(rs.getString("first_name"));
+	            user.setLastName(rs.getString("last_name"));
+	            user.setEmail(rs.getString("email"));
+	            user.setPassword(rs.getString("password"));
+	            user.setPhoneNo(rs.getLong("phone_no"));
+	        }else {
+	        	throw new PersistanceException("email doesnot exists in the dataase");
+	        }
+	        
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println(e.getMessage());
+	        
+	    }catch(PersistanceException e) {
+	    	throw new PersistanceException(e.getMessage());
+	    }
+	    finally {
+	        ConnectionUtil.close(conn, ps, rs);
+	    }
+	    return user;
+	}
+
+	public static User findByEmail(String email) throws PersistanceException {
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		User user = null;
+
+		try {
+			 String query = "SELECT id,first_name, last_name, email, password, phone_no FROM users WHERE email = ? AND is_active=1";
+		        con = ConnectionUtil.getConnnetion();
+		        ps = con.prepareStatement(query);
+		        ps.setString(1, email);
+		        rs = ps.executeQuery();
+
+		        if (rs.next()) {
+		            user = new User();
+		            user.setFirstName(rs.getString("first_name"));
+		            user.setLastName(rs.getString("last_name"));
+		            user.setEmail(rs.getString("email"));
+		            user.setPassword(rs.getString("password"));
+		            user.setPhoneNo(rs.getLong("phone_no"));
+		            user.setId(rs.getInt("id"));
+		        }else {
+		        	throw new PersistanceException("Email doesnot exists in the database");
+		        }
+		        
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistanceException(e.getMessage());
+		}catch(PersistanceException e){
+			throw new PersistanceException(e.getMessage());
+		}
+		finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+		return user;
+	}
 	
+	public static void passwordChecker(String email, String password) throws PersistanceException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			String query = "SELECT password FROM users WHERE email = ?";
+			con = ConnectionUtil.getConnnetion();
+			ps = con.prepareStatement(query);
+			
+			ps.setString(1, email);
+			
+			rs = ps.executeQuery();
+			if(rs.next() && (!rs.getString("password").equals(password))) {
+					throw new PersistanceException("Password mismatch");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistanceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+	}
+
+
 
 }

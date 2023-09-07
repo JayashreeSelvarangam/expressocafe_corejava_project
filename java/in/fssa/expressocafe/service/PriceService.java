@@ -39,7 +39,7 @@ public class PriceService {
 			
 		} catch (PersistanceException e) {
 			e.printStackTrace();
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e.getMessage()); 
 		}
 	}
 /**
@@ -51,12 +51,23 @@ public class PriceService {
 	public List<Price> getHistoryOfProuct(int productId) throws ServiceException , ValidationException{
 		List<Price> priceList = null;
 		try {
-			ProductDAO prod = new ProductDAO();
+			//ProductDAO prod = new ProductDAO();
 			ProductValidator.rejectIfInvalidInt(productId,"ProductId");
 			ProductValidator.isProductIdValid(productId);
 			
 			PriceDAO price = new PriceDAO();
 			priceList = price.getAllPriceHistory(productId);
+		}  catch (PersistanceException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return priceList;
+	}
+	
+	public List<Price> getHistoryOfProuctOnly() throws ServiceException , ValidationException{
+		List<Price> priceList = null;
+		try {
+			PriceDAO price = new PriceDAO();
+			priceList = price.getAllPriceHistoryOnly();
 		}  catch (PersistanceException e) {
 			throw new ServiceException(e.getMessage());
 		}
@@ -103,9 +114,8 @@ public class PriceService {
 	public Product updatePrice(int productId, int sizeId, double price) throws ValidationException, ServiceException {
 		Product product = new Product();
 		try {
-			
-			ProductDAO ProductDAO= new ProductDAO();
-			SizeDAO sizeDAO = new SizeDAO();
+			 
+		
 			PriceDAO price1 = new PriceDAO();
 			ProductService productser = new ProductService();
 			
@@ -122,12 +132,14 @@ public class PriceService {
 			SizeValidator.isSizeIdValid(sizeId);
 			
 			// check whether the price needed to be updated is same as its previous price
-			int Storedprice = price1.findPriceByProductIdAndSizeId(productId, sizeId);
+			//int storedprice = price1.findPriceByProductIdAndSizeId(productId, sizeId);
+			Price getPrice = price1.checkIfPriceExistForProductWithUniqueSize(productId, sizeId);
+			int priceId = getPrice.getPriceId();
+			LocalDateTime date = LocalDateTime.now();
+			java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
 
-			if (Storedprice != price) {
-				int priceId = price1.checkIfPriceExistForProductWithUniqueSize(productId, sizeId);
-				LocalDateTime date = LocalDateTime.now();
-				java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
+			if (getPrice.getPrice() != price) {
+				
 				price1.updatePrice(priceId, dateTime);
 				price1.setNewPrice(productId, sizeId, price, dateTime);
 				// get all prices for the product
@@ -142,3 +154,5 @@ public class PriceService {
 		return product;
 	}
 }
+
+

@@ -44,7 +44,7 @@ public class ProductValidator {
 	 * @param product
 	 * @throws ValidationException
 	 * @throws ServiceException
-	 */
+	 */ 
 	
 	// validate whether the product already exists
 	public static void validateProductNameAlreadyExists(Product product) throws ValidationException, ServiceException {
@@ -53,6 +53,18 @@ public class ProductValidator {
 			List<String> productName = prodservice.getAllProductName();
 			if (productName.contains(product.getName())) {
 				throw new ValidationException("Product name already exists , Create product with different name.");
+			}
+		}catch (ServiceException e) {
+			throw new ValidationException("Product name already exists , Create product with different name.");
+		}
+	}
+	
+	public static void validateProductNameAlreadyshouldExists(Product product) throws ValidationException, ServiceException {
+		try {
+			ProductService prodservice = new ProductService();
+			List<String> productName = prodservice.getAllProductName();
+			if (!productName.contains(product.getName())) {
+				throw new ValidationException("Product name should already exists");
 			}
 		}catch (ServiceException e) {
 			throw new ValidationException("Product name already exists , Create product with different name.");
@@ -67,7 +79,7 @@ public class ProductValidator {
 		try {
 			ProductDAO productdao = new ProductDAO();
 			productdao.doesProductExist(productid);
-		} catch (PersistanceException e) {
+		}catch (PersistanceException e) {
 			throw new ValidationException("Invalid ProductId: no product exists in this product id");
 		}
 	}

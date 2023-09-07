@@ -1,5 +1,6 @@
 package in.fssa.expressocafe.service;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import in.fssa.expressocafe.exception.ServiceException;
 import in.fssa.expressocafe.exception.ValidationException;
 import in.fssa.expressocafe.model.Price;
 import in.fssa.expressocafe.model.Product;
+import in.fssa.expressocafe.util.StringUtil;
 //import in.fssa.expressocafe.model.SizeEnum;
 //import in.fssa.expressocafe.util.IntUtil;
 //import in.fssa.expressocafe.util.StringUtil;
@@ -32,7 +34,7 @@ public class ProductService {
 			PriceService priceService = new PriceService();
 			CategoryDAO cate = new CategoryDAO();
 			
-			// product Validation
+			// product Validation 
 			ProductValidator.validate(product);
 			ProductValidator.validateProductNameAlreadyExists(product);
 
@@ -179,6 +181,53 @@ public class ProductService {
 		}
 		return products;
 	}
+	
+	public void updateProductWithPrices(Product updatedProduct) throws ValidationException, ServiceException {	
+			try {
+			ProductValidator.validate(updatedProduct);	
+			int productId = updatedProduct.getProduct_id();
+			
+			// validation
+			ProductValidator.rejectIfInvalidInt(updatedProduct.getProduct_id(), "productId");
+			ProductValidator.isProductIdValid(updatedProduct.getProduct_id());
+			ProductValidator.validateProductNameAlreadyExists(updatedProduct);
+				
+			CategoryValidator.validateCategory(updatedProduct.getCategory());
+			CategoryValidator.isCategoryIdValid(updatedProduct.getCategory().getCategoryId());
+			
+			LocalDateTime date = LocalDateTime.now();
+			java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
+			
+			ProductDAO productDAO = new ProductDAO();		
+			productDAO.updateProduct(updatedProduct.getProduct_id(),updatedProduct.getName(),updatedProduct.getDescription(),updatedProduct.getCategory().getCategoryId(),dateTime);
+			
+			// validating the price in price service - update price()
+			List<Price> priceList = updatedProduct.getPriceList();		
+			PriceValidator.validatePriceList(priceList);
+				 		
+			PriceService priceService = new PriceService();
+			PriceDAO priceDAO = new PriceDAO();
+			
+			for (Price price : priceList) {	
+			int sizeId = price.getSize().getSizeId();
+			Price pricefromProdIdAndSizeId = priceDAO.checkIfPriceExistForProductWithUniqueSize(productId, sizeId);
+			
+			if (pricefromProdIdAndSizeId != null) {
+			if (pricefromProdIdAndSizeId.getPrice() != price.getPrice()) {
+			int priceId = pricefromProdIdAndSizeId.getPriceId(); 
+			priceService.updatePrice(productId, sizeId, price.getPrice());
+			}
+			} 
+			}			
+			System.out.println("product and its prices updated successfully");
+			} catch (PersistanceException e) {
+			e.printStackTrace();
+			throw new ServiceException("Error updating product and prices: " + e.getMessage());
+			
+			}
+	      }
+				
+	
 	/**
 	 * 
 	 * @param productId
@@ -207,6 +256,24 @@ public class ProductService {
 		}
 		return product;
 	}
+	
+	 
+	 public int getProductIdByProductName(String productName) throws ServiceException, ValidationException {
+		Product product = new Product();
+		product.setName(productName);
+		StringUtil.rejectIfInvalidString(productName, "Product Name");
+		ProductValidator.validateProductNameAlreadyshouldExists(product);
+		 int proId = 0;
+	        try {
+	        	ProductDAO p = new ProductDAO();
+	        	proId= p.getProductIdByProductName(productName);			
+			} catch (PersistanceException e) {
+				e.printStackTrace();
+				throw new ServiceException(e.getMessage());
+			}
+	        return proId;
+	    	}
+
 //	// get all product name
 /**
  * 

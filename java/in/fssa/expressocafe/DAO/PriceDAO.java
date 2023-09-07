@@ -27,7 +27,7 @@ public class PriceDAO {
 	public void createProductPrices(Price price) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
-
+ 
 		try {
 			
 			String query = "INSERT INTO prices (price, size_id, product_id,start_date) VALUES (?, ?, ?,?)";
@@ -223,16 +223,16 @@ public class PriceDAO {
 	 * @return
 	 * @throws PersistanceException
 	 */
-	public int checkIfPriceExistForProductWithUniqueSize(int productId, int sizeId) throws PersistanceException {
+	public Price checkIfPriceExistForProductWithUniqueSize(int productId, int sizeId) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
 		boolean value = true;
-		int priceId = 0;
+		 Price price = null;
 		
 		try {
-			String query = "SELECT size_id,price,start_date,price_id,product_id,end_date FROM prices WHERE product_id = ? AND size_id = ? AND  end_date IS NULL";
+			String query = "SELECT price,start_date,price_id,product_id,end_date FROM prices WHERE product_id = ? AND size_id = ? AND  end_date IS NULL";
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, productId);
@@ -242,8 +242,14 @@ public class PriceDAO {
 			if (!rs.next()) {
 				System.out.print("productprice does not exists");
 				throw new Exception("productprice does not exists");
+			}else {
+				 price = new Price();
+		            price.setPrice(rs.getDouble("price"));
+		            price.setStartDate(rs.getTimestamp("start_date"));
+		            price.setPriceId(rs.getInt("price_id"));
+		            price.setProductId(rs.getInt("product_id"));
 			}
-			priceId = rs.getInt("price_id");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
@@ -255,8 +261,10 @@ public class PriceDAO {
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
-		return priceId;
+		return price;
 	}
+	
+	
 /**
  * 
  * @param product_id
@@ -391,4 +399,48 @@ public class PriceDAO {
 		return priceHistory;
 	}
 
+
+
+public List<Price> getAllPriceHistoryOnly() throws PersistanceException {
+	List<Price> priceHistory = new ArrayList<>();
+	Connection con = null;
+	PreparedStatement ps = null;
+	ResultSet rs = null;
+
+	try {
+		String query = "SELECT size_id,price,start_date,price_id,product_id,end_date FROM prices  ORDER BY start_date ASC";
+		con = ConnectionUtil.getConnnetion();
+		ps = con.prepareStatement(query);
+		
+
+		rs = ps.executeQuery();
+		while (rs.next()) {
+			int sizeId1 = rs.getInt("size_id");
+			int price = rs.getInt("price");
+			Timestamp startDate = rs.getTimestamp("start_date");
+			
+			Product product = new Product();
+			Price priceEntry = new Price();
+			priceEntry.setPrice(price);
+			priceEntry.setPriceId(rs.getInt("price_id"));
+			priceEntry.setProductId(rs.getInt("product_id"));
+			priceEntry.setSize(SizeEnum.values()[rs.getInt("size_id") - 1]);
+			priceEntry.setStartDate(rs.getTimestamp("start_date"));
+			priceEntry.setEndDate(rs.getTimestamp("end_date"));
+			priceHistory.add(priceEntry);
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+		throw new PersistanceException("Cannot get price history of the product");
+	} catch (Exception e) {
+		e.printStackTrace();
+		throw new PersistanceException("Cannot get price history of the product");
+	} finally {
+		ConnectionUtil.close(con, ps, rs);
+	}
+
+	return priceHistory;
 }
+
+}
+

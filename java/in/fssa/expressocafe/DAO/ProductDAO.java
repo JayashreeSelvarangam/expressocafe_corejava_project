@@ -62,7 +62,6 @@ public class ProductDAO {
 		return productId;
 	}
 
-
 	/**
 	 * 
 	 * @return
@@ -301,6 +300,7 @@ public class ProductDAO {
 
 
 
+	
 	/**
 	 * 
 	 * @return
@@ -315,7 +315,7 @@ public class ProductDAO {
 
 		try {
 			con = ConnectionUtil.getConnnetion();
-			String query = "SELECT product_id,name,description,category_id FROM products";
+			String query = "SELECT product_id,name,description,category_id FROM products WHERE status=1";
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
 
@@ -356,7 +356,7 @@ public class ProductDAO {
 
 		try {
 			con = ConnectionUtil.getConnnetion();
-			String query = "SELECT product_id, name, description, category_id FROM products where category_id = ? ";
+			String query = "SELECT product_id, name, description, category_id FROM products where category_id = ? AND status=1";
 			ps = con.prepareStatement(query);
 			ps.setInt(1, categoryId);
 			rs = ps.executeQuery();
@@ -420,7 +420,36 @@ public class ProductDAO {
 	}
 
 
-	
+	public  int getProductIdByProductName(String productName) throws PersistanceException {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    int productId = -1; // Initialize with a default value (-1) to indicate no match found.
+
+	    try {
+	        con = ConnectionUtil.getConnnetion(); // Correct the method name to getConnection()
+	        String query = "SELECT product_id FROM products WHERE name = ? AND status = 1";
+	        ps = con.prepareStatement(query);
+	        ps.setString(1, productName);
+	        rs = ps.executeQuery();
+	        
+	        if (rs.next()) {
+	            productId = rs.getInt("product_id");
+	        }else {
+	        	 throw new PersistanceException("Cannot get product ID by name");
+	        }
+	    } catch (SQLException e) {
+	        throw new PersistanceException("Cannot get product ID by name");
+	    }catch(PersistanceException e){
+	    	throw new PersistanceException("Cannot get product ID by name");
+	    }
+	    finally {
+	    	
+	        ConnectionUtil.close(con, ps, rs);
+	    }
+	    return productId;
+	}
+
 	
 //	public 	Product createProduct1(Product product) throws PersistanceException {
 //

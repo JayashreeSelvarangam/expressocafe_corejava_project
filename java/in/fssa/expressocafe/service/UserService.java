@@ -12,6 +12,7 @@ import in.fssa.expressocafe.interfaces.UserServiceInterface;
 import in.fssa.expressocafe.model.User;
 import in.fssa.expressocafe.model.UserEntity;
 import in.fssa.expressocafe.util.IntUtil;
+import in.fssa.expressocafe.util.StringUtil;
 import in.fssa.expressocafe.validator.UserValidator;
 
 /**
@@ -152,7 +153,7 @@ public class UserService {
 	 * @throws PersistanceException 
 	 * @throws RuntimeException    If the user does not exist or an error occurs
 	 *                             during database interaction.
-	 */
+	 */ 
 	public User findByUserId(int userId) throws ValidationException, ServiceException {
 		try {
 			IntUtil.rejectIfInvalidInt(userId,"userId");
@@ -174,6 +175,36 @@ public class UserService {
 		
 	}
 
+	public void loginUser(String email, String password) throws ValidationException, ServiceException {
+		try {
+		
+			StringUtil.rejectIfInvalidEmail(email);
+			StringUtil.rejectIfIvalidPassword(password);
+			
+			UserDAO.findByEmail(email);
+			UserDAO.passwordChecker(email, password);
+		}
+		catch (PersistanceException e){
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
+		}
+	}
+	
+	
+	public User findByEmail(String email) throws ValidationException, ServiceException {
+
+		User user = null;
+		try {
+			StringUtil.rejectIfInvalidEmail(email);
+			user = UserDAO.findByEmail(email);
+		} 
+		catch (PersistanceException e) {
+			e.printStackTrace();
+			throw new ServiceException("Failed to findById");
+		}
+		System.out.println(user);
+		return user;
+	}
 }
 
 

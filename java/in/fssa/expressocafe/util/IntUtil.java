@@ -39,27 +39,32 @@ public class IntUtil {
  * @throws ValidationException
  */
 	public static void priceCheck(double input, String inputName) throws ValidationException {
-		if(input < 0 || input > 1000) {
+		if(input <= 0 || input > 1000) {
 			throw new ValidationException("Invalid ".concat(inputName)+" should be greater than 0.");
 		}
 	}
 /**
  * 
- * @param priceList
+ * @param priceList 
  * @throws ValidationException
  */
 	public static void validatePriceListRelationships(List<Price> priceList) throws ValidationException {
 		
 		if (priceList == null) {
 			throw new ValidationException("Prices for the product are required.");
-		}
-		
+		}		
 		for (Price price : priceList) {
+			if(price==null) {
+				throw new ValidationException("price object cannot be null") ;
+			}			
 			if (price.getPrice() <= 0 || price.getPrice() >= 1000) {
 				throw new ValidationException("Invalid price: price should be lesser than 1000 and greater than 0") ;
 			}
 			if (price.getSize() == null) {
 				throw new ValidationException("SizeEnum cannot be null");
+			}
+			if (price.getSize().getSizeId() == 0) {
+				throw new ValidationException("Sizes cannot be null");
 			}
 		}
 	}

@@ -67,14 +67,14 @@ public class TestCreateProduct {
 		ValidationException exception = assertThrows(ValidationException.class,() -> productService.createProduct(null));
 		assertEquals("Product Object is null.", exception.getMessage());
 	}
-
+ 
 
 	@Test
 	void testCreateProductWithExistingName() {
 
 		ProductService prodService = new ProductService();
 		Product product = new Product();
-		product.setName("coffeefrealkojiisjijfi");
+		product.setName("IcedCoffee");
 		product.setDescription("Feel refreshed");
 
 		Category category = new Category();
@@ -93,7 +93,7 @@ public class TestCreateProduct {
 		Price priceLarge = new Price();
 		priceLarge.setPrice(5.99);
 		priceLarge.setSize(SizeEnum.LARGE);
-		
+		 
 		priceList.add(priceSmall);
 		priceList.add(priceMedium);
 		priceList.add(priceLarge);
@@ -300,7 +300,7 @@ public class TestCreateProduct {
 		category.setCategoryId(4);
 		product.setCategory(category);
 		
-		List<Price> priceList = new ArrayList<>();
+		List<Price> priceList = new ArrayList<>(); 
 		product.setPriceList(null);
 		
 		ProductService productService = new ProductService();
@@ -321,7 +321,7 @@ public class TestCreateProduct {
 		Price priceSmall = new Price();
 		priceSmall.setPrice(3.99);
 		priceSmall.setSize(SizeEnum.SMALL);
-
+ 
 		Price priceMedium = new Price();
 		priceMedium.setPrice(4.99);
 		priceMedium.setSize(SizeEnum.MEDIUM);

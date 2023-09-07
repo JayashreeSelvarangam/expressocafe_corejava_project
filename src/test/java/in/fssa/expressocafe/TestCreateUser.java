@@ -41,7 +41,7 @@ public class TestCreateUser {
 		User newUser = new User();
 
 		newUser.setFirstName("Jayashree");
-		newUser.setLastName("Selvarangam");
+		newUser.setLastName("Selvarangam"); 
 		newUser.setEmail(randomString + "@gmail.com");
 		newUser.setPassword("Awd@2004");
 		newUser.setPhoneNo(9345209293l);
@@ -91,7 +91,7 @@ public class TestCreateUser {
 	}
 
 	@Test
-	@Order(4)
+	@Order(4) 
 	 void testCreateUserWithEmptyFirstName() {
 		UserService userService = new UserService();
 		User newUser = new User();
@@ -111,7 +111,7 @@ public class TestCreateUser {
 
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
-
+ 
 	@Test
 	@Order(5)
 	 void testCreateUserWithInvalidFirstNamePattern() {
@@ -279,7 +279,7 @@ public class TestCreateUser {
 		newUser.setFirstName("Formido");
 		newUser.setLastName("Boi");
 		newUser.setEmail(randomString + "@gmail.com");
-		newUser.setPassword("Praveen123");
+		newUser.setPassword("Prav3");
 		newUser.setPhoneNo(6374111637l);
 
 		Exception exception = assertThrows(ValidationException.class, () -> {

@@ -15,3 +15,4 @@ public class PriceValidator {
 		IntUtil.priceCheck(price, "Price");
 	}
 }
+ 
