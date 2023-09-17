@@ -24,7 +24,7 @@ public class CategoryService  {
 	    	CategoryDAO categoryDAO = new CategoryDAO();
 	    	cate = categoryDAO.getAllCategories();
 	    	}
-	    	catch(PersistanceException e) {
+	    	catch(PersistanceException e) { 
 				 throw new ServiceException(e.getMessage());
 			 }
 		return cate;

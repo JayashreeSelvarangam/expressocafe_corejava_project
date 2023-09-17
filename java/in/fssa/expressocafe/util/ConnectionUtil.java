@@ -24,10 +24,13 @@ public class ConnectionUtil {
 //            userName = env.get("DATABASE_USERNAME");
 //            password = env.get("DATABASE_PASSWORD");
         	
-//        	url ="jdbc:mysql://164.52.216.41:3306/jayashree_selvarangam_corejava_project";
-//        	userName = "FJRF5pAEFMOa";
-//        	password = "31d3ab25-ff69-44ee-928a-5d4ef7de504c"; 
-//      }		
+//        	url ="jdbc:mysql://localhost:3306/java_project";
+//        	userName = "root";
+//        	password = "123456"; 
+//      }	
+  
+            
+     
 		Connection connection = null;
 		
 		try {

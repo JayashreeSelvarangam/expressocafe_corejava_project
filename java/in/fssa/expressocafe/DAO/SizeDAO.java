@@ -35,7 +35,7 @@ public class SizeDAO {
 				sizes.add(size);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			e.printStackTrace(); 
 			throw new RuntimeException(e);
 		} finally {
 			ConnectionUtil.close(connection, ps, rs);

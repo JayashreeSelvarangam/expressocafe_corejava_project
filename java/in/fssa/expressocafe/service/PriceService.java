@@ -126,7 +126,7 @@ public class PriceService {
 			PriceValidator.priceCheck(price, "Price");
 			
 			// check product id already exists
-			ProductValidator.isProductIdValid(productId);
+			ProductValidator.isProductIdValid(productId); 
 			
 			// check size_id already exists
 			SizeValidator.isSizeIdValid(sizeId);

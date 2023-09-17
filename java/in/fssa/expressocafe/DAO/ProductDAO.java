@@ -12,6 +12,7 @@ import java.util.Map;
 
 import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.interfaces.PriceDAOInterface;
+import in.fssa.expressocafe.model.Cart;
 import in.fssa.expressocafe.model.Category;
 import in.fssa.expressocafe.model.Price;
 import in.fssa.expressocafe.model.Product;
@@ -19,34 +20,32 @@ import in.fssa.expressocafe.model.SizeEnum;
 import in.fssa.expressocafe.util.ConnectionUtil;
 
 public class ProductDAO {
-	/**
+	/** 
 	 * 
 	 * @param product
 	 * @return
 	 * @throws PersistanceException
 	 */
 	public int createProduct(Product product) throws PersistanceException {
-		Connection connection = null;
+		Connection connection = null; 
 		PreparedStatement ps = null;
 		ResultSet generatedKeys = null;
 		int productId = -1;
-	
-
 		try {
+			 // Establish a database connection
 			connection = ConnectionUtil.getConnnetion();
+			// Define the SQL query for inserting a new product
 			String insertProductQuery = "INSERT INTO products (name, description, category_id, created_date) VALUES (?, ?, ?, ?)";
 			ps = connection.prepareStatement(insertProductQuery, PreparedStatement.RETURN_GENERATED_KEYS);
 			ps.setString(1, product.getName());
 			ps.setString(2, product.getDescription());
-			ps.setInt(3, product.getCategory().getCategoryId());
-
-		
-			
+			ps.setInt(3, product.getCategory().getCategoryId());	
 			ps.setTimestamp(4, product.getCreatedDate());
 
-			int rowsAffected = ps.executeUpdate();
+			int rowsAffected = ps.executeUpdate(); 
 			if (rowsAffected > 0) {
 				generatedKeys = ps.getGeneratedKeys();
+	            // Check if there are generated keys and retrieve the first one
 				if (generatedKeys.next()) {
 					productId = generatedKeys.getInt(1);
 				}
@@ -55,13 +54,14 @@ public class ProductDAO {
 				throw new PersistanceException("Product creation failed");
 			}
 		} catch (SQLException e) {
-			throw new PersistanceException("Product creation failed");
+			throw new PersistanceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(connection, ps, generatedKeys);
 		}
 		return productId;
 	}
 
+	
 	/**
 	 * 
 	 * @return

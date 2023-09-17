@@ -23,7 +23,7 @@ public class Price {
 	public Timestamp getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Timestamp endDate) {
+	public void setEndDate(Timestamp endDate) { 
 		this.endDate = endDate;
 	}
 	public int getPriceId() {

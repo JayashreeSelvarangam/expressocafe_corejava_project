@@ -103,7 +103,7 @@ public class CategoryDAO {
         List<Category> categories = new ArrayList<>();
 
         try {
-            connection = ConnectionUtil.getConnnetion();
+            connection = ConnectionUtil.getConnnetion(); 
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
 

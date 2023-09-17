@@ -175,24 +175,27 @@ public class UserService {
 		
 	}
 
-	public void loginUser(String email, String password) throws ValidationException, ServiceException {
+	public int loginUser(String email, String password) throws ValidationException, ServiceException {
+		int userId = -1 ;
 		try {
 		
 			StringUtil.rejectIfInvalidEmail(email);
 			StringUtil.rejectIfIvalidPassword(password);
 			
-			UserDAO.findByEmail(email);
+			User user = UserDAO.findByEmail(email);
+			userId = user.getId();
 			UserDAO.passwordChecker(email, password);
 		}
 		catch (PersistanceException e){
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
 		}
+		return userId ; 
 	}
 	
 	
 	public User findByEmail(String email) throws ValidationException, ServiceException {
-
+ 
 		User user = null;
 		try {
 			StringUtil.rejectIfInvalidEmail(email);

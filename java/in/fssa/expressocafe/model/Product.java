@@ -14,11 +14,24 @@ public class Product {
 	private String description;
 	private boolean status;
 	private SizeEnum size;
+	private double price;
+	private Price priceObj;
 	private Category category;
 	private List<Price> priceList = new ArrayList<>();
 	private Timestamp createdDate;
 
-	
+	public Price getPriceObj() {
+		return priceObj;
+	}
+	public void setPriceObj(Price priceObj) {
+		this.priceObj = priceObj;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
 	public int getProduct_id() {
 		return product_id;
 	}
@@ -31,7 +44,7 @@ public class Product {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDescription() {
+	public String getDescription() { 
 		return description;
 	}
 	public void setDescription(String description) {
@@ -62,7 +75,7 @@ public class Product {
 		this.priceList = priceList;
 	}
 	public Timestamp getCreatedDate() {
-		return createdDate;
+		return createdDate; 
 	}
 	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;

@@ -1,5 +1,6 @@
 package in.fssa.expressocafe.service;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import in.fssa.expressocafe.DAO.ProductDAO;
 import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.exception.ServiceException;
 import in.fssa.expressocafe.exception.ValidationException;
+import in.fssa.expressocafe.model.Cart;
+import in.fssa.expressocafe.model.Category;
 import in.fssa.expressocafe.model.Price;
 import in.fssa.expressocafe.model.Product;
 import in.fssa.expressocafe.util.StringUtil;
@@ -32,7 +35,7 @@ public class ProductService {
 		try {
 			ProductDAO productDAO = new ProductDAO();
 			PriceService priceService = new PriceService();
-			CategoryDAO cate = new CategoryDAO();
+			CategoryDAO cate = new CategoryDAO(); 
 			
 			// product Validation 
 			ProductValidator.validate(product);
@@ -52,7 +55,7 @@ public class ProductService {
 			PriceValidator.validatePriceList(product.getPriceList());
 			
 			// set Date
-			LocalDateTime date = LocalDateTime.now();
+			LocalDateTime date = LocalDateTime.now(); 
 			java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
 			product.setCreatedDate(dateTime);
 			
@@ -130,7 +133,7 @@ public class ProductService {
 	 * 
 	 * @return
 	 * @throws ServiceException
-	 */
+	 */ 
 
 	public List<Product> getAllProducts() throws ServiceException {
 		
@@ -141,9 +144,11 @@ public class ProductService {
 			PriceDAO priceDAO = new PriceDAO();
 			
 			products = productDAO.getAllProducts();	
-			
+			System.out.println(products+"123");
 			for (Product product : products) {
+				
 				List<Price> prices = priceDAO.getPricesForProduct(product.getProduct_id());
+				
 				product.setPriceList(prices);
 			}
 		} catch (PersistanceException e) {
@@ -184,6 +189,7 @@ public class ProductService {
 	
 	public void updateProductWithPrices(Product updatedProduct) throws ValidationException, ServiceException {	
 			try {
+			// Validate the updated product's fields
 			ProductValidator.validate(updatedProduct);	
 			int productId = updatedProduct.getProduct_id();
 			
@@ -192,40 +198,45 @@ public class ProductService {
 			ProductValidator.isProductIdValid(updatedProduct.getProduct_id());
 			ProductValidator.validateProductNameAlreadyExists(updatedProduct);
 				
+			// Validate the category associated with the updated product
 			CategoryValidator.validateCategory(updatedProduct.getCategory());
 			CategoryValidator.isCategoryIdValid(updatedProduct.getCategory().getCategoryId());
 			
+			// Get the current timestamp for product update
 			LocalDateTime date = LocalDateTime.now();
 			java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
 			
+			 // Initialize ProductDAO to update the product details
 			ProductDAO productDAO = new ProductDAO();		
 			productDAO.updateProduct(updatedProduct.getProduct_id(),updatedProduct.getName(),updatedProduct.getDescription(),updatedProduct.getCategory().getCategoryId(),dateTime);
 			
 			// validating the price in price service - update price()
 			List<Price> priceList = updatedProduct.getPriceList();		
 			PriceValidator.validatePriceList(priceList);
-				 		
+			   // Initialize PriceService and PriceDAO for price-related operations
 			PriceService priceService = new PriceService();
 			PriceDAO priceDAO = new PriceDAO();
 			
 			for (Price price : priceList) {	
 			int sizeId = price.getSize().getSizeId();
+			// Check if a price exists for the product and size
 			Price pricefromProdIdAndSizeId = priceDAO.checkIfPriceExistForProductWithUniqueSize(productId, sizeId);
 			
 			if (pricefromProdIdAndSizeId != null) {
 			if (pricefromProdIdAndSizeId.getPrice() != price.getPrice()) {
 			int priceId = pricefromProdIdAndSizeId.getPriceId(); 
+			// Update the price if it has changed
 			priceService.updatePrice(productId, sizeId, price.getPrice());
-			}
-			} 
-			}			
+			 }
+		} 
+	}			
 			System.out.println("product and its prices updated successfully");
-			} catch (PersistanceException e) {
+	} catch (PersistanceException e) {
 			e.printStackTrace();
 			throw new ServiceException("Error updating product and prices: " + e.getMessage());
 			
-			}
-	      }
+	     }
+	 }
 				
 	
 	/**
@@ -274,6 +285,85 @@ public class ProductService {
 	        return proId;
 	    	}
 
+	 	public Product getProductWithProductIdAndSizeId(int productId , int sizeId) throws ValidationException, ServiceException {
+	 		
+	 		Product product = new Product();
+	 		
+			ProductValidator.rejectIfInvalidInt(productId,"ProductId");
+			ProductValidator.isProductIdValid(productId);
+			
+			ProductValidator.rejectIfInvalidInt(sizeId, "sizeId");
+			
+			ProductService prod = new ProductService();
+			product = prod.findProductWithProductId(productId);
+
+			try {
+				PriceDAO price = new PriceDAO();
+				Price price1 = new Price();
+				price1 = price.checkIfPriceExistForProductWithUniqueSize(productId, sizeId);
+				product.setPriceObj(price1);
+			} catch (PersistanceException e) {
+				e.printStackTrace();
+				throw new ServiceException(e.getMessage());
+			}
+			return product;
+	 	}
+	 	
+	 	public double getTotalCartPrice(List<Cart> cartList) {
+	        double sum = 0;
+	  
+	            if (cartList.size() > 0) {
+	                for (Cart item : cartList) {
+	                	sum += item.getPrice()*item.getQuantity();
+	                }
+	            }	        
+	        return sum;
+	    }
+	 	
+	
+	 	
+	 	public List<Cart> getCartProducts(List<Cart> cartList) throws ServiceException {
+	 	 // add validation for cartList 	
+	 	
+	 	 List<Cart> cartProducts = new ArrayList<>();
+	 	 PriceDAO p = new PriceDAO();
+	 	 ProductDAO pd = new ProductDAO();
+	 	   Product product = null;
+	 	   int price = 0 ;
+	 	    try {
+	 	        if (cartList.size() > 0) {
+	 	            for (Cart item : cartList) {
+	 	                // Find the product details by product ID
+	 	                 product = pd.findProductWithProductId(item.getProduct_id());
+	 	                if (product != null) {
+	 	                    // Find the price for the product and size ID
+	 	                     price = p.findPriceByProductIdAndSizeId(product.getProduct_id(), item.getSizeId());
+	 	                    
+	 	                    // Create a new Cart object and populate it
+	 	                    Cart cart = new Cart();
+	 	                    cart.setProduct_id(product.getProduct_id());
+	 	                    cart.setName(product.getName());
+	 	                    Category cate = new Category();
+	 	                    cate.setCategoryId(product.getCategory().getCategoryId());
+	 	                    cart.setCategory(cate);
+	 	                    cart.setPrice(price * item.getQuantity());
+	 	                    cart.setQuantity(item.getQuantity());
+	 	                    
+	 	                    // Add the Cart object to the list
+	 	                    cartProducts.add(cart);
+	 	                }
+	 	            }
+	 	        }
+	 	    } catch (PersistanceException e) {
+	 	        e.printStackTrace();
+	 	        throw new ServiceException(e.getMessage());
+	 	    }
+
+	 	    return cartProducts;
+	 	}
+
+	 	
+	 	
 //	// get all product name
 /**
  * 

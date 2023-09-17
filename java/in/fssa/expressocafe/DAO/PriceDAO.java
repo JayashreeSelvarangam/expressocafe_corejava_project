@@ -77,8 +77,8 @@ public class PriceDAO {
 
 	            con = ConnectionUtil.getConnnetion();
 	            ps = con.prepareStatement(query);
-	            ps.setInt(1, productId);
-	            rs = ps.executeQuery();
+	            ps.setInt(1, productId); 
+	            rs = ps.executeQuery(); 
 
 	            while (rs.next()) {
 	                Price price = new Price();
@@ -102,6 +102,8 @@ public class PriceDAO {
 	        }
 	        return prices;
 	    }
+	 
+	 
 // another method for get all prices 
 	
 //	public List<Product> getAllprices(List<Product> product1) throws PersistanceException {
@@ -137,7 +139,9 @@ public class PriceDAO {
 //		}
 //		return product1;
 //	}
-	
+	 
+	 
+	 
 	 /**
 	  * 
 	  * @param priceId
@@ -152,7 +156,7 @@ public class PriceDAO {
 			
 			con = ConnectionUtil.getConnnetion();
 			ps = con.prepareStatement(query);
-			
+	        // Set parameters in the prepared statement
 			ps.setTimestamp(1, dateTime);
 			ps.setInt(2, priceId);
 			int rows = ps.executeUpdate();
@@ -160,12 +164,13 @@ public class PriceDAO {
 			System.out.println("Product price created sucessfully");
 			}
 			else {
+				// If no rows were affected, throw an exception
 				throw new Exception("Price updation is unsuccessfull");
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage());
+			System.out.println(e.getMessage()); 
 			throw new PersistanceException("Price Updation is unsuccessful");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -182,7 +187,7 @@ public class PriceDAO {
  * @return
  * @throws PersistanceException
  */
-	public int findPriceByProductIdAndSizeId(int productId, int sizeId) throws PersistanceException {
+	public  int findPriceByProductIdAndSizeId(int productId, int sizeId) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -198,6 +203,7 @@ public class PriceDAO {
 			rs = ps.executeQuery();
 
 			if (!rs.next()) {
+				// If no result is found, throw an exception
 				System.out.print("productprice does not exists");
 				throw new Exception("productprice does not exists");
 			}
@@ -243,13 +249,13 @@ public class PriceDAO {
 				System.out.print("productprice does not exists");
 				throw new Exception("productprice does not exists");
 			}else {
+				// Create a Price object with retrieved data
 				 price = new Price();
 		            price.setPrice(rs.getDouble("price"));
 		            price.setStartDate(rs.getTimestamp("start_date"));
 		            price.setPriceId(rs.getInt("price_id"));
 		            price.setProductId(rs.getInt("product_id"));
-			}
-			
+			}	
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
@@ -298,6 +304,7 @@ public class PriceDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
+			throw new PersistanceException("Price updation is unsuccessfull");
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}

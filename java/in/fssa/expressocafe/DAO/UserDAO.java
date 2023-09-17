@@ -384,7 +384,7 @@ public class UserDAO implements UserInterface {
 		        ps.setString(1, email);
 		        rs = ps.executeQuery();
 
-		        if (rs.next()) {
+		        if (rs.next()) { 
 		            user = new User();
 		            user.setFirstName(rs.getString("first_name"));
 		            user.setLastName(rs.getString("last_name"));

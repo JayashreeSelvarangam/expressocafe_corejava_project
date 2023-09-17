@@ -46,11 +46,11 @@ public class IntUtil {
 /**
  * 
  * @param priceList 
- * @throws ValidationException
+ * @throws ValidationException 
  */
 	public static void validatePriceListRelationships(List<Price> priceList) throws ValidationException {
 		
-		if (priceList == null) {
+		if (priceList == null) { 
 			throw new ValidationException("Prices for the product are required.");
 		}		
 		for (Price price : priceList) {
