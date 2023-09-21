@@ -15,9 +15,16 @@ public class Order extends Product {
 	private List<OrderItems> orderItems;
 	private OrderItems orderItem;
 	private Timestamp orderedDate;
+	private Timestamp cancelDate;
 	private Timestamp deliveryDate;
 	private int addressId;
 
+	public Timestamp getCancelDate() {
+		return cancelDate;
+	}
+	public void setCancelDate(Timestamp cancelDate) {
+		this.cancelDate = cancelDate;
+	}
 	public OrderItems getOrderItem() {
 		return orderItem;
 	}

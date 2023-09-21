@@ -178,7 +178,6 @@ public class UserService {
 	public int loginUser(String email, String password) throws ValidationException, ServiceException {
 		int userId = -1 ;
 		try {
-		
 			StringUtil.rejectIfInvalidEmail(email);
 			StringUtil.rejectIfIvalidPassword(password);
 			

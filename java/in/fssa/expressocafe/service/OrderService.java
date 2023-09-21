@@ -18,103 +18,144 @@ import in.fssa.expressocafe.model.Order;
 import in.fssa.expressocafe.model.OrderItems;
 import in.fssa.expressocafe.model.Price;
 import in.fssa.expressocafe.model.Product;
+import in.fssa.expressocafe.validator.OrderValidator;
 
 
 public class OrderService {
-    /**
-     * 
-     * @param cartList
-     * @param userId
-     * @param addressId
-     * @param totalCost
-     * @throws ServiceException
-     */
-	public void CreateOrder(List<Cart> cartList , int userId , int addressId , double totalCost) throws ServiceException{
+	/**
+	 * Creates a new order in the system based on the provided cart items and user information.
+	 *
+	 * @param cartList   The list of Cart items representing the products to be ordered.
+	 * @param userId     The unique identifier of the user placing the order.
+	 * @param addressId  The unique identifier of the delivery address for the order.
+	 * @param totalCost  The total cost of the order.
+	 * @throws ServiceException If an error occurs during the order creation process.
+	 * @throws ValidationException 
+	 */
+	public void CreateOrder(List<Cart> cartList, int userId, int addressId, double totalCost) throws ServiceException, ValidationException {
+	    try {
+	    	// order validation
+	    	OrderValidator.validateCreateOrder(cartList, userId, addressId, totalCost);
+	        // Create instances of data access objects (DAOs) for orders and order items
+	        OrderDAO orderDAO = new OrderDAO();
+	        OrderItemsDAO orderItemDAO = new OrderItemsDAO();
+	        // Create a new Order object to represent the order
+	        Order order = new Order();
+	        // Calculate the delivery date and timestamps
+	        LocalDateTime currentDateTime = LocalDateTime.now();
+	        LocalDateTime modifiedDateTime = currentDateTime.plus(20, ChronoUnit.MINUTES);
+	        Timestamp deliveryTimestamp = Timestamp.valueOf(modifiedDateTime);
+	        LocalDateTime modifiedDateTime1 = currentDateTime.plus(5, ChronoUnit.MINUTES);
+	        Timestamp cancelTimestamp = Timestamp.valueOf(modifiedDateTime1);
+	        // Set order attributes
+	        order.setDeliveryDate(deliveryTimestamp);
+	        order.setOrderCode(generateRandomProductName());
+	        order.setUserId(userId);
+	        order.setAddressId(addressId);
+	        order.setTotalCost(totalCost);
+	        order.setCancelDate(cancelTimestamp);
+	        // Create the order and obtain the generated order ID
+	        int orderId = orderDAO.createOrder(order);
+	        // Create order items for each product in the cart
+	        for (Cart cart : cartList) {
+	            orderItemDAO.createOrderItem(orderId, cart.getProduct_id(), cart.getPriceObj().getPriceId(), cart.getSizeId(), cart.getQuantity());
+	        }
+	    } catch (PersistanceException e) {
+	        // Handle database-related exceptions, log the error, and throw a custom ServiceException with the error message
+	        e.printStackTrace();
+	        throw new ServiceException(e.getMessage());
+	    }
+	}
+
+	/**
+	 * Retrieves a list of orders for a specific user, including order details and
+	 * associated products.
+	 *
+	 * @param userId The unique identifier of the user for whom orders are being
+	 *               retrieved.
+	 * @return A list of Order objects representing the user's orders with
+	 *         associated order items.
+	 * @throws ServiceException    If an error occurs during the retrieval process.
+	 * @throws ValidationException If there's a validation error.
+	 */
+	public List<Order> GetAllOrder(int userId) throws ServiceException, ValidationException {
+		List<Order> orderList = new ArrayList<>();
 		try {
-			
-		OrderDAO orderDAO = new OrderDAO();
-		OrderItemsDAO orderItem = new OrderItemsDAO();
-		Order order = new Order();
-		
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        LocalDateTime modifiedDateTime = currentDateTime.plus(30, ChronoUnit.MINUTES);
-        Timestamp sqlTimestamp = Timestamp.valueOf(modifiedDateTime);
-        order.setDeliveryDate(sqlTimestamp);
-        order.setOrderCode(generateRandomProductName());
-	    order.setUserId(userId);
-	    order.setAddressId(addressId);
-	    order.setTotalCost(totalCost);
-	    
-	    int orderId = orderDAO.createOrder(order);
-	    
-		for(Cart cart : cartList){
-		    orderItem.createOrderItem(orderId, cart.getProduct_id(), cart.getPriceObj().getPriceId(), cart.getSizeId(),cart.getQuantity());
-			} 
-		}catch (PersistanceException e) {
+			OrderDAO orderDAO = new OrderDAO();
+			OrderItemsDAO orderItemDAO = new OrderItemsDAO();
+			ProductService productService = new ProductService();
+			// Retrieve a list of orders for the given user
+			orderList = orderDAO.userOrders(userId);
+			for (Order order : orderList) {
+				int orderId = order.getOrderId();
+				// Retrieve order items for each order
+				List<OrderItems> orderItems = orderItemDAO.GetOrderItemByOrderId(orderId);
+				for (OrderItems orderItem : orderItems) {
+					// Retrieve product details for each order item
+					Product product = productService.getProductWithProductIdAndSizeId(
+							orderItem.getProduct().getProduct_id(), orderItem.getSizeId());
+					orderItem.setName(product.getName());
+					orderItem.setCategory(product.getCategory());
+					Price price = new Price();
+					price.setPrice(product.getPriceObj().getPrice());
+					price.setPriceId(product.getPriceObj().getPriceId());
+					orderItem.setPriceObj(price);
+				}
+				// Set the order items for the order
+				order.setOrderItems(orderItems);
+			}
+		} catch (PersistanceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
-		}	
+		}
+
+		return orderList;
+	}
+
+	/**
+	 * Cancels an order in the system by updating its status.
+	 *
+	 * @param orderId The unique identifier of the order to be canceled.
+	 * @return true if the order was successfully canceled, false otherwise.
+	 * @throws ServiceException If an error occurs during the cancellation process.
+	 */
+	public boolean cancelOrder(int orderId) throws ServiceException {
+		OrderDAO orderDAO = new OrderDAO();
+		boolean isCanceled = false;
+		try {
+			// Attempt to cancel the order and check if it was canceled successfully
+			isCanceled = orderDAO.cancelOrder(orderId);
+		} catch (PersistanceException e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
+		}
+		return isCanceled;
 	}
 	
 	/**
-	 * 
-	 * @param userId
-	 * @return
-	 * @throws ServiceException
-	 * @throws ValidationException 
+	 * Checks whether an order has been canceled or not based on its status in the system.
+	 *
+	 * @param orderId The unique identifier of the order to be checked for cancellation.
+	 * @return true if the order is not canceled (status = 1), false if canceled (status = 0) or not found.
+	 * @throws ServiceException If an error occurs during the status check.
 	 */
-
-	public List<Order> GetAllOrder(int userId) throws ServiceException, ValidationException {	
-	    List<Order> orderList = new ArrayList<>();
+	public boolean CheckCancelOrder(int orderId) throws ServiceException {
+	    OrderDAO orderDAO = new OrderDAO();
+	    boolean isNotCanceled = false;
 	    try {
-	        OrderDAO orderDAO = new OrderDAO();
-	        OrderItemsDAO orderItemDAO = new OrderItemsDAO();
-	        ProductService productService = new ProductService();
-
-	        orderList = orderDAO.userOrders(userId);
-
-	        for (Order order : orderList) {
-	            int orderId = order.getOrderId();
-	            
-	            List<OrderItems> orderItems = orderItemDAO.GetOrderItemByOrderId(orderId);
-	            
-	            for (OrderItems orderItem : orderItems) {
-	                Product product = productService.getProductWithProductIdAndSizeId(orderItem.getProduct().getProduct_id(), orderItem.getSizeId());
-	                orderItem.setName(product.getName());
-	                orderItem.setCategory(product.getCategory());
-	                Price price = new Price();
-	                price.setPrice(product.getPriceObj().getPrice());
-	                price.setPriceId(product.getPriceObj().getPriceId());
-	                orderItem.setPriceObj(price);
-	            }
-	            
-	            order.setOrderItems(orderItems);
-	        }
+	        // Check whether the order has been canceled or not
+	        isNotCanceled = orderDAO.checkWhetherOrderisCancelledOrNot(orderId);
 	    } catch (PersistanceException e) {
 	        e.printStackTrace();
 	        throw new ServiceException(e.getMessage());
 	    }
-	    
-	    return orderList;
-	}
-
-	
-	public boolean cancelOrder (int orderId) throws ServiceException { 
-		OrderDAO orderDAO = new OrderDAO();
-		boolean v = false;
-		
-		try {
-			v = orderDAO.cancelOrder(orderId);
-		} catch (PersistanceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new ServiceException(e.getMessage());
-		}
-		
-		return v;
-		
-	}
-	
+	    return isNotCanceled;
+	}	
+	/**
+	 * Generates a random product name consisting of 10 uppercase letters.
+	 *
+	 * @return A randomly generated product name.
+	 */
 	  private String generateRandomProductName() {
 	        String alphabet = "abcdefghijklmnopqrstuvwxyz";
 	        StringBuilder dishName = new StringBuilder();

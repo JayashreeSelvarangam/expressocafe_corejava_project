@@ -43,6 +43,13 @@ public class IntUtil {
 			throw new ValidationException("Invalid ".concat(inputName)+" should be greater than 0.");
 		}
 	}
+	
+	public static void totalPriceCheck(double input, String inputName) throws ValidationException {
+		if(input <= 0 ) {
+			throw new ValidationException("Invalid ".concat(inputName)+" should be greater than 0.");
+		}
+	}
+	
 /**
  * 
  * @param priceList 

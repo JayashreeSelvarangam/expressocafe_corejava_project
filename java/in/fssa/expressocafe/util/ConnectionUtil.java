@@ -13,9 +13,9 @@ public class ConnectionUtil {
         String password;
 
 //  if (System.getenv("CI") != null) {
-            url = System.getenv("DATABASE_HOSTNAME");
-            userName = System.getenv("DATABASE_USERNAME");
-            password = System.getenv("DATABASE_PASSWORD");
+//            url = System.getenv("DATABASE_HOSTNAME");
+//            userName = System.getenv("DATABASE_USERNAME");
+//            password = System.getenv("DATABASE_PASSWORD");
 // }
 //else {
             
@@ -24,9 +24,9 @@ public class ConnectionUtil {
 //            userName = env.get("DATABASE_USERNAME");
 //            password = env.get("DATABASE_PASSWORD");
         	
-//        	url ="jdbc:mysql://localhost:3306/java_project";
-//        	userName = "root";
-//        	password = "123456"; 
+        	url ="jdbc:mysql://localhost:3306/java_project123";
+        	userName = "root";
+        	password = "123456"; 
 //      }	
   
             
