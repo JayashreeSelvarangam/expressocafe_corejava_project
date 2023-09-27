@@ -26,7 +26,7 @@ public class OrderValidator {
 			throw new ValidationException("Cart list is empty or null.");
 		}
 		// Validate the user ID
-		IntUtil.rejectIfInvalidInt(userId, "Invalid user ID.");
+		IntUtil.rejectIfInvalidInt(userId, "userID");
 		// Validate the address ID
 		validateAddressId(addressId);
 		// Check the total cost
@@ -42,9 +42,8 @@ public class OrderValidator {
 		// Validate the order ID
 		IntUtil.rejectIfInvalidInt(orderId, "Invalid order ID.");
 	}
-	/**
+	/** 
 	 * Validates an address ID.
-	 *
 	 * @param addressId The address ID to validate.
 	 * @throws ValidationException If the address ID is invalid.
 	 */
@@ -52,4 +51,10 @@ public class OrderValidator {
 		// Validate the address ID
 		IntUtil.rejectIfInvalidInt(addressId, "Invalid address ID.");
 	}
+
+
+public static void validateUserId(int userId) throws ValidationException {
+	// Validate the order ID
+	IntUtil.rejectIfInvalidInt(userId, "Invalid userID");
+}
 }

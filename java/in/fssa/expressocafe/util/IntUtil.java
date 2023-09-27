@@ -21,7 +21,7 @@ public class IntUtil {
 			throw new ValidationException("Invalid phone number");
 		}
 	}
-/**
+/** 
  * 
  * @param input
  * @param inputName
@@ -32,7 +32,7 @@ public class IntUtil {
 			throw new ValidationException("Invalid ".concat(inputName)+" should be greater than 0.");
 		}
 	}
-/**
+/** 
  * 
  * @param input
  * @param inputName

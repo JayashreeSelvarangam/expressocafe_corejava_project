@@ -15,7 +15,16 @@ import in.fssa.expressocafe.model.Product;
 import in.fssa.expressocafe.util.ConnectionUtil;
 
 public class OrderItemsDAO {
-
+	 /**
+     * Creates a new order item in the database.
+     *
+     * @param orderId   The unique identifier of the order to which the item belongs.
+     * @param productId The unique identifier of the product associated with the item.
+     * @param priceId   The unique identifier of the price associated with the item.
+     * @param sizeId    The unique identifier of the size associated with the item.
+     * @param quantity  The quantity of the item.
+     * @throws PersistanceException If an error occurs while creating the order item.
+     */
     public void createOrderItem(int orderId, int productId, int priceId , int sizeId,int quantity) throws PersistanceException {
         Connection connection = null;
         PreparedStatement ps = null;
@@ -45,10 +54,17 @@ public class OrderItemsDAO {
         }
     }
     
+    /**
+     * Retrieves a list of order items based on the provided order ID.
+     *
+     * @param orderId The unique identifier of the order for which to retrieve items.
+     * @return A list of OrderItems objects representing the items associated with the order.
+     * @throws PersistanceException If an error occurs during the retrieval process.
+     */
     public List<OrderItems> GetOrderItemByOrderId(int orderId) throws PersistanceException {
         List<OrderItems> orderItemsList1 = new ArrayList<>();
         Connection connection = null;
-        PreparedStatement ps = null;
+        PreparedStatement ps = null; 
         ResultSet rs = null;
         try {
             // Establish a database connection

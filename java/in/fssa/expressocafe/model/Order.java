@@ -12,6 +12,7 @@ public class Order extends Product {
 	private double totalCost;
 	private String orderCode;
 	private boolean deliveryStatus;
+	private String packageType;
 	private List<OrderItems> orderItems;
 	private OrderItems orderItem;
 	private Timestamp orderedDate;
@@ -19,11 +20,18 @@ public class Order extends Product {
 	private Timestamp deliveryDate;
 	private int addressId;
 
+	public String getPackageType() {
+		return packageType;
+	}
+	public void setPackageType(String packageType) {
+		this.packageType = packageType;
+	}
+
 	public Timestamp getCancelDate() {
 		return cancelDate;
 	}
 	public void setCancelDate(Timestamp cancelDate) {
-		this.cancelDate = cancelDate;
+		this.cancelDate = cancelDate; 
 	}
 	public OrderItems getOrderItem() {
 		return orderItem;

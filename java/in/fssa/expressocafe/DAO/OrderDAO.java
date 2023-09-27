@@ -26,16 +26,16 @@ public class OrderDAO {
 	 * @throws PersistanceException If there is an error while interacting with the
 	 *                              database.
 	 */
-	public int createOrder(Order model) throws PersistanceException {
+	public int createOrder(Order model) throws PersistanceException { 
 		Connection connection = null;
 		PreparedStatement ps = null;
-		ResultSet generatedKeys = null;
+		ResultSet generatedKeys = null; 
 		int orderId = -1;
 
 		try {
 			// Establish a database connection
 			connection = ConnectionUtil.getConnnetion(); // Get a database connection
-			String insertOrderQuery = "INSERT INTO orders (user_id, total_cost, delivery_at, address_id, order_code, cancel_time) VALUES (?, ?, ?, ?, ?, ?)";
+			String insertOrderQuery = "INSERT INTO orders (user_id, total_cost, delivery_at, address_id, order_code, cancel_time , package_type ) VALUES (?, ?, ?, ?, ?, ?,?)";
 			// Prepare the SQL statement for inserting a new order and retrieving generated
 			// keys
 			ps = connection.prepareStatement(insertOrderQuery, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -45,6 +45,7 @@ public class OrderDAO {
 			ps.setInt(4, model.getAddressId()); // Set the address ID
 			ps.setString(5, model.getOrderCode()); // Set the order code
 			ps.setTimestamp(6, model.getCancelDate()); // Set the cancel date
+			ps.setString(7, model.getPackageType());
 
 			// Execute the SQL statement and check if any rows were affected
 			int rowsAffected = ps.executeUpdate();
@@ -83,7 +84,7 @@ public class OrderDAO {
 	        connection = ConnectionUtil.getConnnetion(); // Get a database connection
 
 	        // SQL query to retrieve user's orders and associated order items
-	        String query = "SELECT o.order_code, o.order_id, o.user_id, o.total_cost, o.ordered_at, o.delivery_at, oi.product_id, oi.price_id, oi.quantity, oi.size_id, o.cancel_time " +
+	        String query = "SELECT o.package_type,o.order_code,o.address_id, o.order_id, o.user_id, o.total_cost, o.ordered_at, o.delivery_at, oi.product_id, oi.price_id, oi.quantity, oi.size_id, o.cancel_time " +
 	                "FROM orders o " +
 	                "INNER JOIN order_items oi ON o.order_id = oi.order_id " +
 	                "WHERE o.user_id = ? " +
@@ -102,7 +103,9 @@ public class OrderDAO {
 	            // Create a new Order object if the order ID has changed
 	            if (orderId != currentOrderId) {
 	                currentOrder = new Order();
+	                currentOrder.setPackageType(rs.getString("package_type"));
 	                currentOrder.setOrderId(orderId);
+	                currentOrder.setAddressId(rs.getInt("address_id"));
 	                currentOrder.setUserId(userId);
 	                currentOrder.setTotalCost(rs.getDouble("total_cost"));
 	                currentOrder.setOrderedDate(rs.getTimestamp("ordered_at"));
@@ -217,7 +220,7 @@ public class OrderDAO {
 		}
 
 		// Return the list of retrieved orders.
-		return orderList;
+		return orderList; 
 	}
 
 	/**

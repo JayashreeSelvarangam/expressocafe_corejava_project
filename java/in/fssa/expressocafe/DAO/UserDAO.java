@@ -11,6 +11,7 @@ import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.interfaces.UserInterface;
 import in.fssa.expressocafe.model.User;
 import in.fssa.expressocafe.util.ConnectionUtil;
+import in.fssa.expressocafe.util.PasswordUtil;
 
 public class UserDAO implements UserInterface {
 
@@ -30,7 +31,8 @@ public class UserDAO implements UserInterface {
 	 *                          process. The original exception is printed, and a
 	 *                          RuntimeException is thrown.
 	 */
-	@Override
+
+	@Override 
 	public void create(User newUser) throws PersistanceException {
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -87,7 +89,7 @@ public class UserDAO implements UserInterface {
 
 			ps.setString(1, updatedUser.getFirstName());
 			ps.setString(2, updatedUser.getLastName());
-			ps.setLong(3, updatedUser.getPhoneNo());
+			ps.setLong(3, updatedUser.getPhoneNo()); 
 			ps.setInt(4, id);
 			ps.executeUpdate();
 
@@ -419,13 +421,18 @@ public class UserDAO implements UserInterface {
 			ps = con.prepareStatement(query);
 			
 			ps.setString(1, email);
-			
+		//	password = PasswordUtil.encodePassword(password);
+		//	userDAO.passwordChecker(email, password);
 			rs = ps.executeQuery();
-			if(rs.next() && (!rs.getString("password").equals(password))) {
+			if(rs.next()) {
+			String password1 = rs.getString("password");
+			String password2 = PasswordUtil.decodePassword(password1);
+			if((!password2.equals(password))) {
 					throw new PersistanceException("Password mismatch");
 			}
+			}
 			
-		} catch (SQLException e) {
+			} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistanceException(e.getMessage());
 		} finally {

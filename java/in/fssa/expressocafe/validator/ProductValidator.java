@@ -26,7 +26,7 @@ public class ProductValidator {
 		StringUtil.rejectIfInvalidStringWithoutPattern(product.getDescription(), "Product Description");
 	}
 /**
- * 
+ *  
  * @param product   
  * @throws ValidationException
  */

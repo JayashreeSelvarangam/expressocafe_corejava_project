@@ -12,6 +12,7 @@ import in.fssa.expressocafe.interfaces.UserServiceInterface;
 import in.fssa.expressocafe.model.User;
 import in.fssa.expressocafe.model.UserEntity;
 import in.fssa.expressocafe.util.IntUtil;
+import in.fssa.expressocafe.util.PasswordUtil;
 import in.fssa.expressocafe.util.StringUtil;
 import in.fssa.expressocafe.validator.UserValidator;
 
@@ -19,7 +20,6 @@ import in.fssa.expressocafe.validator.UserValidator;
  * This class implements the UserServiceInterface and provides methods to interact with user data.
  */
 public class UserService {
-
 	/**
 	 * Retrieves a set of all active users from the database.
 	 *
@@ -32,12 +32,12 @@ public class UserService {
 	 */
 	public Set<User> getAllUsers() {
 		UserDAO userDAO = new UserDAO();
-		Set<User> userList = new HashSet<>();
+		Set<User> userList = new HashSet<>(); 
 		try {
 			userList = userDAO.findAll();
 			for (User user : userList) {
 				System.out.println(user);
-			}
+			} 
 		} catch (PersistanceException e) {
 			e.printStackTrace();
 		}
@@ -56,11 +56,14 @@ public class UserService {
 	 * @throws Exception If the provided user information is invalid or an error
 	 *                   occurs during database interaction.
 	 */
+	
 	public void createUser(User newUser) throws ValidationException, ServiceException {
 		UserDAO userDAO = new UserDAO();
 		try {
 			UserValidator.validate(newUser);
 			boolean check = userDAO.isUserEmailPresent(newUser.getEmail());
+			
+			newUser.setPassword(PasswordUtil.encodePassword(newUser.getPassword()));
 			
 			if(check) {
 				throw new ServiceException("An account with the email already exists");
@@ -89,23 +92,21 @@ public class UserService {
 	 *                   occurs during database interaction.
 	 */
 	public void updateUser(int id, User updatedUser) throws ValidationException, ServiceException{
-
 		try {
 			UserDAO userDAO = new UserDAO();
 			IntUtil.rejectIfInvalidInt(id,"userId");
-			boolean check = UserDAO.isUserPresent(id);
+			boolean check = UserDAO.isUserPresent(id); 
 			
 			if (!check) {
 				throw new ServiceException("User does not exist");
 			}
-			UserValidator.validate(updatedUser);
+			UserValidator.validateUpdate(updatedUser);
+			updatedUser.setPassword(PasswordUtil.encodePassword(updatedUser.getPassword()));
 			userDAO.update(id, updatedUser);
 		} catch (PersistanceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
 		}
-
-
 	}
 
 	/**

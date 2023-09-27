@@ -75,7 +75,7 @@ public class TestCreateUser {
 		User newUser = new User();
 
 		newUser.setFirstName(null);
-		newUser.setLastName("Boi");
+		newUser.setLastName("ama");
 		newUser.setEmail(randomString + "@gmail.com");
 		newUser.setPassword("Awe@20dj04");
 		newUser.setPhoneNo(9345209293l);
@@ -97,7 +97,7 @@ public class TestCreateUser {
 		User newUser = new User();
 
 		newUser.setFirstName("");
-		newUser.setLastName("Boi");
+		newUser.setLastName("ama");
 		newUser.setEmail(randomString + "@gmail.com");
 		newUser.setPassword("Aspirin@2004");
 		newUser.setPhoneNo(9345209293l);
@@ -118,8 +118,8 @@ public class TestCreateUser {
 		UserService userService = new UserService();
 		User newUser = new User();
 
-		newUser.setFirstName("Prave  1243");
-		newUser.setLastName("Boi");
+		newUser.setFirstName("ama  1243");
+		newUser.setLastName("ama");
 		newUser.setEmail(randomString + "@gmail.com");
 		newUser.setPassword("Aspirin@2004");
 		newUser.setPhoneNo(9345209293l);
@@ -140,9 +140,9 @@ public class TestCreateUser {
 		UserService userService = new UserService();
 		User newUser = new User();
 
-		newUser.setFirstName("Formido");
-		newUser.setLastName("Boi");
-		newUser.setEmail("formgmail.com");
+		newUser.setFirstName("ama");
+		newUser.setLastName("ama");
+		newUser.setEmail("ama.com");
 		newUser.setPassword("Aspirin@2004");
 		newUser.setPhoneNo(9345209293l);
 
@@ -166,8 +166,8 @@ public class TestCreateUser {
 		UserService userService = new UserService();
 		User newUser = new User();
 
-		newUser.setFirstName("Formido");
-		newUser.setLastName("Boi");
+		newUser.setFirstName("ama");
+		newUser.setLastName("ama");
 		newUser.setEmail(null);
 		newUser.setPassword("Aspirin@2004");
 		newUser.setPhoneNo(9345209293l);
@@ -188,8 +188,8 @@ public class TestCreateUser {
 		UserService userService = new UserService();
 		User newUser = new User();
 
-		newUser.setFirstName("Formido");
-		newUser.setLastName("Boi");
+		newUser.setFirstName("ama");
+		newUser.setLastName("ama");
 		newUser.setEmail("");
 		newUser.setPassword("Aspirin@2004");
 		newUser.setPhoneNo(9345209293l);
@@ -210,8 +210,8 @@ public class TestCreateUser {
 		UserService userService = new UserService();
 		User newUser = new User();
 
-		newUser.setFirstName("Formido");
-		newUser.setLastName("Boi");
+		newUser.setFirstName("ama");
+		newUser.setLastName("ama");
 		newUser.setEmail(randomString + "@gmail.com");
 		newUser.setPassword("Aspirin@2004");
 		newUser.setPhoneNo(123456789l);
@@ -232,8 +232,8 @@ public class TestCreateUser {
 		UserService userService = new UserService();
 		User newUser = new User();
 
-		newUser.setFirstName("Formido");
-		newUser.setLastName("Boi");
+		newUser.setFirstName("ama");
+		newUser.setLastName("ama");
 		newUser.setEmail(randomString + "@gmail.com");
 		newUser.setPassword(null);
 		newUser.setPhoneNo(6374111637l);
@@ -254,8 +254,8 @@ public class TestCreateUser {
 		UserService userService = new UserService();
 		User newUser = new User();
 
-		newUser.setFirstName("Formido");
-		newUser.setLastName("Boi");
+		newUser.setFirstName("ama");
+		newUser.setLastName("ama");
 		newUser.setEmail(randomString + "@gmail.com");
 		newUser.setPassword("");
 		newUser.setPhoneNo(6374111637l);
@@ -273,11 +273,11 @@ public class TestCreateUser {
 	@org.junit.jupiter.api.Test
 	@Order(12)
 	void testCreateUserWithInvalidPasswordPattern() {
-		UserService userService = new UserService();
+		UserService userService = new UserService(); 
 		User newUser = new User();
 
-		newUser.setFirstName("Formido");
-		newUser.setLastName("Boi");
+		newUser.setFirstName("ama");
+		newUser.setLastName("ama");
 		newUser.setEmail(randomString + "@gmail.com");
 		newUser.setPassword("Prav3");
 		newUser.setPhoneNo(6374111637l);

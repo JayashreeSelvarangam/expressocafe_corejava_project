@@ -18,6 +18,7 @@ import in.fssa.expressocafe.model.Order;
 import in.fssa.expressocafe.model.OrderItems;
 import in.fssa.expressocafe.model.Price;
 import in.fssa.expressocafe.model.Product;
+import in.fssa.expressocafe.validator.OrderItemValidator;
 import in.fssa.expressocafe.validator.OrderValidator;
 
 
@@ -32,7 +33,7 @@ public class OrderService {
 	 * @throws ServiceException If an error occurs during the order creation process.
 	 * @throws ValidationException 
 	 */
-	public void CreateOrder(List<Cart> cartList, int userId, int addressId, double totalCost) throws ServiceException, ValidationException {
+	public void CreateOrder(List<Cart> cartList, int userId, int addressId, double totalCost ,String packageType) throws ServiceException, ValidationException {
 	    try {
 	    	// order validation
 	    	OrderValidator.validateCreateOrder(cartList, userId, addressId, totalCost);
@@ -47,9 +48,11 @@ public class OrderService {
 	        Timestamp deliveryTimestamp = Timestamp.valueOf(modifiedDateTime);
 	        LocalDateTime modifiedDateTime1 = currentDateTime.plus(5, ChronoUnit.MINUTES);
 	        Timestamp cancelTimestamp = Timestamp.valueOf(modifiedDateTime1);
-	        // Set order attributes
-	        order.setDeliveryDate(deliveryTimestamp);
+	        // Set order attributes 
+	        order.setDeliveryDate(deliveryTimestamp); 
 	        order.setOrderCode(generateRandomProductName());
+	        System.out.print("orderservice"+packageType);
+	        order.setPackageType(packageType);
 	        order.setUserId(userId);
 	        order.setAddressId(addressId);
 	        order.setTotalCost(totalCost);
@@ -66,7 +69,7 @@ public class OrderService {
 	        throw new ServiceException(e.getMessage());
 	    }
 	}
-
+ 
 	/**
 	 * Retrieves a list of orders for a specific user, including order details and
 	 * associated products.
@@ -80,6 +83,8 @@ public class OrderService {
 	 */
 	public List<Order> GetAllOrder(int userId) throws ServiceException, ValidationException {
 		List<Order> orderList = new ArrayList<>();
+		// validate user id 
+		OrderValidator.validateUserId(userId);
 		try {
 			OrderDAO orderDAO = new OrderDAO();
 			OrderItemsDAO orderItemDAO = new OrderItemsDAO();
@@ -88,7 +93,10 @@ public class OrderService {
 			orderList = orderDAO.userOrders(userId);
 			for (Order order : orderList) {
 				int orderId = order.getOrderId();
+				OrderValidator.validateOrderId(orderId);
+				
 				// Retrieve order items for each order
+				
 				List<OrderItems> orderItems = orderItemDAO.GetOrderItemByOrderId(orderId);
 				for (OrderItems orderItem : orderItems) {
 					// Retrieve product details for each order item
@@ -100,6 +108,8 @@ public class OrderService {
 					price.setPrice(product.getPriceObj().getPrice());
 					price.setPriceId(product.getPriceObj().getPriceId());
 					orderItem.setPriceObj(price);
+					// validate each order Item 
+					OrderItemValidator.validate(orderItem);
 				}
 				// Set the order items for the order
 				order.setOrderItems(orderItems);
@@ -118,9 +128,11 @@ public class OrderService {
 	 * @param orderId The unique identifier of the order to be canceled.
 	 * @return true if the order was successfully canceled, false otherwise.
 	 * @throws ServiceException If an error occurs during the cancellation process.
+	 * @throws ValidationException 
 	 */
-	public boolean cancelOrder(int orderId) throws ServiceException {
+	public boolean cancelOrder(int orderId) throws ServiceException, ValidationException {
 		OrderDAO orderDAO = new OrderDAO();
+		OrderValidator.validateOrderId(orderId);
 		boolean isCanceled = false;
 		try {
 			// Attempt to cancel the order and check if it was canceled successfully
@@ -138,9 +150,11 @@ public class OrderService {
 	 * @param orderId The unique identifier of the order to be checked for cancellation.
 	 * @return true if the order is not canceled (status = 1), false if canceled (status = 0) or not found.
 	 * @throws ServiceException If an error occurs during the status check.
+	 * @throws ValidationException 
 	 */
-	public boolean CheckCancelOrder(int orderId) throws ServiceException {
+	public boolean CheckCancelOrder(int orderId) throws ServiceException, ValidationException {
 	    OrderDAO orderDAO = new OrderDAO();
+	    OrderValidator.validateOrderId(orderId);
 	    boolean isNotCanceled = false;
 	    try {
 	        // Check whether the order has been canceled or not

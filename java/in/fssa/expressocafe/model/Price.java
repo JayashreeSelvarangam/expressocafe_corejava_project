@@ -9,7 +9,7 @@ public class Price {
 	private Timestamp endDate;
 	private int priceId;
    
-	private double price;
+	private double price; 
     private SizeEnum size;
     private int product_id;
 	

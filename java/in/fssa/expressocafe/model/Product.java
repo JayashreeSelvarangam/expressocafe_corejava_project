@@ -88,8 +88,8 @@ public class Product {
 	                 .append(", name=").append(name)
 	                 .append(", description=").append(description)
 	                 .append(", status=").append(status)
-	                 .append(", size=").append(size)
-	                 .append(", category=").append(category.getCategoryId());
+	                 .append(", size=").append(size);
+
 
 	    // Append prices from priceList
 	    stringBuilder.append(", prices=[");

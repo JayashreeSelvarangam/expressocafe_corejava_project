@@ -21,7 +21,7 @@ public class OrderItems extends Product{
 	}
 
 	public void setOrder(Order order) {
-		this.order = order;
+		this.order = order; 
 	}
 
 

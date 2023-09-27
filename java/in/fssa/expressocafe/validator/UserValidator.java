@@ -27,7 +27,7 @@ public class UserValidator {
 	 * This method checks whether the provided User object is valid for processing.
 	 * It ensures that the User object and its properties meet the required
 	 * validation criteria. Specifically, it validates the user's email, password,
-	 * first name, and phone number. If any validation check fails, a
+	 * first name, and phone number. If any validation check fails, a 
 	 * ValidationException is thrown with an appropriate error message.
 	 *
 	 * @param user The User object to be validated.
@@ -43,6 +43,8 @@ public class UserValidator {
 		StringUtil.rejectIfInvalidString1(user.getEmail(), "Email");
 		StringUtil.rejectIfInvalidString1(user.getPassword(), "Password");
 		StringUtil.rejectIfInvalidString1(user.getFirstName(), "First Name");
+		StringUtil.rejectIfInvalidString1(user.getLastName(), "Last Name");
+
 
 		if (!pattern1.matcher(user.getEmail()).matches()) {
 			throw new ValidationException(
@@ -70,6 +72,24 @@ public class UserValidator {
 			throw new ValidationException("Name should only contain alphabets and be seprated by only one space");
 		}
 
+		if (user.getPhoneNo() < 6000000000l || user.getPhoneNo() > 9999999999l) {
+			throw new ValidationException("Phone number is invalid");
+		}
+
+	}
+	
+	public static void validateUpdate(User user) throws ValidationException { 
+		if (user == null) {
+			throw new ValidationException("Invalid user input");
+		}
+		StringUtil.rejectIfInvalidString1(user.getFirstName(), "First Name");
+		StringUtil.rejectIfInvalidString1(user.getLastName(), "Last Name");
+		if (!pattern3.matcher(user.getFirstName()).matches()) {
+			throw new ValidationException("Name should only contain alphabets and be seprated by only one space");
+		}
+		if (!pattern3.matcher(user.getLastName()).matches()) {
+			throw new ValidationException("Name should only contain alphabets and be seprated by only one space");
+		}
 		if (user.getPhoneNo() < 6000000000l || user.getPhoneNo() > 9999999999l) {
 			throw new ValidationException("Phone number is invalid");
 		}

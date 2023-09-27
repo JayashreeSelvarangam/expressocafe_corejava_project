@@ -12,12 +12,13 @@ import com.mysql.cj.xdevapi.Statement;
 import in.fssa.expressocafe.exception.PersistanceException;
 import in.fssa.expressocafe.model.DeliveryAddresses;
 import in.fssa.expressocafe.util.ConnectionUtil;
-
+// order id already exists or not 
+// order item testcases
 public class DeliveryAddressDAO {
 
 	public void create(DeliveryAddresses newAddress) throws PersistanceException {
 	    Connection conn = null;
-	    PreparedStatement ps = null;
+	    PreparedStatement ps = null; 
 	    ResultSet generatedKeys = null;
 
 	    try {
@@ -148,7 +149,7 @@ public class DeliveryAddressDAO {
 		        ConnectionUtil.close(conn, ps, rs);
 		    }
 		    return address;
-		}
+			}
 
 		public List<DeliveryAddresses> listAllAddressesByUserUniqueId(int  userId) throws PersistanceException {
 		    List<DeliveryAddresses> addressList = new ArrayList<DeliveryAddresses>();
@@ -188,6 +189,44 @@ public class DeliveryAddressDAO {
 		    return addressList;
 		}
 		
+		public DeliveryAddresses getAddressByUserIdAndStatus(int userId, int status) throws PersistanceException {
+		    Connection conn = null;
+		    PreparedStatement ps = null;
+		    ResultSet rs = null;
+		    
+		    DeliveryAddresses deliveryAddress = null; // Initialize with null
+		    
+		    try {
+		        String query = "SELECT * FROM addresses WHERE user_id = ? AND status = ?";
+		        conn = ConnectionUtil.getConnnetion(); // Fix the method name
+		        ps = conn.prepareStatement(query);
+		        ps.setInt(1, userId);
+		        ps.setInt(2, status);
+		        rs = ps.executeQuery();
+
+		        if (rs.next()) {
+		            // Populate the DeliveryAddresses object from the ResultSet
+		            deliveryAddress = new DeliveryAddresses();
+		            deliveryAddress.setAddressId(rs.getInt("address_id"));
+		            deliveryAddress.setUserId(rs.getInt("user_id"));
+		            deliveryAddress.setTitle(rs.getString("title"));
+		            deliveryAddress.setAddress(rs.getString("address"));
+		            deliveryAddress.setLandmark(rs.getString("land_mark"));
+		            deliveryAddress.setCity(rs.getString("city"));
+		            deliveryAddress.setPincode(rs.getInt("pincode"));
+		            deliveryAddress.setStatus(rs.getInt("status"));
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        throw new PersistanceException(e.getMessage());
+		    } finally {
+		        ConnectionUtil.close(conn, ps, rs);
+		    }
+
+		    return deliveryAddress;
+		}
+
+		
 		public boolean hasActiveAddressForUser(int userId) throws PersistanceException {
 		    Connection conn = null;
 		    PreparedStatement ps = null;
@@ -220,24 +259,25 @@ public class DeliveryAddressDAO {
 		    Connection conn = null;
 		    PreparedStatement ps = null;
 		    ResultSet rs = null;
-
+		    boolean v = false;
 		    try {
-		        String query = "SELECT address_id FROM addresses WHERE user_id = ? AND title = ? AND address = ? AND land_mark = ? AND city = ? AND pincode = ? AND created_at = ? AND modified_at = ? AND status = ?";
+		    	
+		        String query = "SELECT address_id FROM addresses WHERE user_id = ? AND title = ? AND address = ? AND land_mark = ? AND city = ? AND pincode = ?  AND status = ?";
 		        conn = ConnectionUtil.getConnnetion();
 		        ps = conn.prepareStatement(query);
-		        ps.setInt(1, address.getUserId());
+		        ps.setInt(1, address.getUser().getId());
 		        ps.setString(2, address.getTitle());
 		        ps.setString(3, address.getAddress());
 		        ps.setString(4, address.getLandmark());
 		        ps.setString(5, address.getCity());
 		        ps.setInt(6, address.getPincode());
-		        ps.setTimestamp(7, address.getCreatedAt());
-		        ps.setTimestamp(8, address.getModifiedAt());
-		        ps.setInt(9, address.getStatus());
+		        ps.setInt(7, address.getStatus());
 
 		        rs = ps.executeQuery();
-
-		        return rs.next();
+                
+		         if(rs.next()){
+		        	 v = true;
+		       }
 		    } catch (SQLException e) {
 		        e.printStackTrace();
 		        System.out.println(e.getMessage());
@@ -245,6 +285,7 @@ public class DeliveryAddressDAO {
 		    } finally {
 		        ConnectionUtil.close(conn, ps, rs);
 		    }
+		    return v;
 		}
 		
 		

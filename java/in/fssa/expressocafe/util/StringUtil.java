@@ -20,11 +20,11 @@ public class StringUtil {
 	        throw new ValidationException(inputName.concat(" contains invalid characters"));
 	    }	    
 	}
-	
+	 
 	public static void rejectIfInvalidString1(String input, String inputName) throws ValidationException {
 		if (input == null || "".equals(input.trim())) {
 			throw new ValidationException(inputName.concat(" cannot be null or empty"));
-		}
+		} 
 	}
 	
 	public static void rejectIfInvalidStringWithoutPattern(String input, String inputName) throws ValidationException {
@@ -46,7 +46,7 @@ public class StringUtil {
 
 	public static void rejectIfIvalidPassword(String password) throws ValidationException {
 
-		String regexPattern = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}";
+		String regexPattern = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$";
 		Pattern pattern = Pattern.compile(regexPattern);
 		Matcher matcher = pattern.matcher(password);
 		if (!matcher.matches()) {
