@@ -13,7 +13,7 @@ public class DeliverAddressService {
  public void createDeliveryAddress(DeliveryAddresses newAddress) throws ValidationException, ServiceException {
 
 		DeliveryAddressDAO deliveryAddressDAO = new DeliveryAddressDAO();
-		AddressValidator.validateCreate(newAddress);
+		
 		DeliverAddressService deliveryService = new DeliverAddressService();
 		
 		Boolean value = deliveryService.hasActiveAddressForUser(newAddress.getUser().getId());
@@ -24,8 +24,10 @@ public class DeliverAddressService {
 		}else {
 			newAddress.setStatus(0);
 		}
+		AddressValidator.validateCreate(newAddress);
+
 		try {
-			deliveryAddressDAO.create(newAddress);
+			deliveryAddressDAO.create(newAddress); 
 		} catch(PersistanceException e){
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());

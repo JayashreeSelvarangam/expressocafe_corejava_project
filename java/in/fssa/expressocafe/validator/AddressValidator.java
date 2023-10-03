@@ -24,13 +24,13 @@ public class AddressValidator {
 		}
 
 		try {
-			if(newAddress.getStatus()>=0) {
+			
 			DeliveryAddressDAO deliveryAddressDAO = new DeliveryAddressDAO();
 			boolean isAddressExists = deliveryAddressDAO.isAddressDetailsExists(newAddress);
 			if (isAddressExists) {
 				throw new ValidationException("This address details is already exists");
 			}
-			}
+			
 		} catch (PersistanceException e) {
 			throw new ValidationException(e.getMessage());
 		}

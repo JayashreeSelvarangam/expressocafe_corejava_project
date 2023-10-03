@@ -32,7 +32,7 @@ public class DeliveryAddressDAO {
 	        ps.setString(5, newAddress.getCity());
 	        ps.setInt(6, newAddress.getPincode());
 	        ps.setInt(7, newAddress.getStatus());
-
+ 
 	        int rowsAffected = ps.executeUpdate();
 
 	        if (rowsAffected > 0) {
