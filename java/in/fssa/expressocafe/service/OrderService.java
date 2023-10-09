@@ -54,7 +54,7 @@ public class OrderService {
 	        System.out.print("orderservice"+packageType);
 	        order.setPackageType(packageType);
 	        order.setUserId(userId);
-	        order.setAddressId(addressId);
+	        order.setAddressId(addressId); 
 	        order.setTotalCost(totalCost);
 	        order.setCancelDate(cancelTimestamp);
 	        // Create the order and obtain the generated order ID

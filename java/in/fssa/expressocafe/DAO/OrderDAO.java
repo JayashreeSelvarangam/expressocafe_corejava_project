@@ -30,7 +30,7 @@ public class OrderDAO {
 		Connection connection = null;
 		PreparedStatement ps = null;
 		ResultSet generatedKeys = null; 
-		int orderId = -1;
+		int orderId = -1; 
 
 		try {
 			// Establish a database connection
