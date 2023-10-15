@@ -22,9 +22,9 @@ public class OrderValidator {
 	public static void validateCreateOrder(List<Cart> cartList, int userId, int addressId, double totalCost)
 			throws ValidationException {
 		// Check if the cart list is empty or null
-		if (cartList == null || cartList.isEmpty()) {
-			throw new ValidationException("Cart list is empty or null.");
-		}
+//		if (cartList == null || cartList.isEmpty()) {
+//			throw new ValidationException("Cart list is empty or null.");
+//		}
 		// Validate the user ID
 		IntUtil.rejectIfInvalidInt(userId, "userID");
 		// Validate the address ID

@@ -395,7 +395,7 @@ public class UserDAO implements UserInterface {
 		            user.setPhoneNo(rs.getLong("phone_no"));
 		            user.setId(rs.getInt("id"));
 		        }else {
-		        	throw new PersistanceException("Email doesnot exists in the database");
+		        	throw new PersistanceException("Email doesnot exists ");
 		        }
 		        
 		} catch (SQLException e) {
